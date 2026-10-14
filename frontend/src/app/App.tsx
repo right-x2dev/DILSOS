@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../features/auth/authStore";
 import { LoginPage } from "../features/auth/LoginPage";
 import { DashboardPage } from "../features/dashboard/DashboardPage";
+import { DockPage } from "../features/docks/DockPage";
 import { GanttPage } from "../features/gantt/GanttPage";
 import { OptimizePage } from "../features/optimize/OptimizePage";
 import { OrdersPage } from "../features/orders/OrdersPage";
@@ -36,7 +37,7 @@ export function App() {
         <Route path="orders" element={<OrdersPage />} />
         <Route path="optimize" element={<OptimizePage />} />
         <Route path="gantt" element={<GanttPage />} />
-        <Route path="docks" element={<ComingSoon title="도크 타임라인" phase="Phase 2" />} />
+        <Route path="docks" element={<DockPage />} />
         <Route path="routes" element={<ComingSoon title="배송 경로" phase="Phase 3" />} />
         <Route path="journey" element={<ComingSoon title="통합 타임라인" phase="Phase 4" />} />
         <Route path="disruptions" element={<ComingSoon title="교란 시뮬레이터" phase="Phase 6" />} />

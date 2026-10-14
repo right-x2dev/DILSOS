@@ -37,3 +37,16 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | API: scenarios (build/patch/clone/validate/geo), orders, resources, runs, schedule, validation, metrics, compare, algorithms, dashboard, audit | TESTED | `tests/integration/test_phase1_api.py` |
 | UI: dashboard, scenarios/builder, orders & resources, optimization console, warehouse Gantt, runs/audit | TESTED | `frontend/src/tests/phase1.test.tsx`; manual: CP-SAT run via DB worker → Gantt in browser |
 | CSV import / export buttons | TODO (Phase 7) | rendered disabled with “준비 중” label |
+
+## Phase 2 — Packing & dock scheduling
+
+| Item | Status | Evidence |
+|---|---|---|
+| Route timing propagation (travel/service/wait/late, load trajectory, return) | TESTED | `test_route_time_propagation_by_hand` |
+| Hard-constraint repair (drop stops breaking shift end / hard windows) | TESTED | `test_hard_window_repair_drops_violating_stop` |
+| Shipment readiness: LOAD starts after all orders packed; departure ≥ load end | TESTED | `test_dock_tiny_feasible_and_ready_before_load`, API `test_dock_run_publishes…` |
+| Dock FIFO / EDD dispatch, compatible docks, dock hours & downtime, no overlap | TESTED | `test_single_dock_no_overlap`, `test_dock_downtime_respected` |
+| Dock CP-SAT with exact downstream delivery timing (fixed sequences) | TESTED | `test_cpsat_dock_not_worse_than_heuristics_on_bottleneck` (bottleneck: 1628 vs FIFO 1666 / EDD 1785 late-min, seed 1, 10 s) |
+| Baseline time-aware grouping (dock-only problem) | IMPLEMENTED | used by all dock algorithms; replaced by VRPTW in Phase 3/4 |
+| Validator D1–D5 + R1–R8 | TESTED | `test_dock_validator_catches_violations` |
+| Dock timeline UI (dock lanes, vehicle lanes, waiting/load/road bars, overlap/capacity/early-load warnings) | TESTED | `frontend/src/tests/phase2.test.tsx`; manual browser check (run #4, 0 warnings) |

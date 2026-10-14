@@ -22,3 +22,9 @@ All notable changes per phase. Dates are UTC.
 - REST API for scenarios, orders, resources, runs, schedule/validation/metrics/compare, algorithms, dashboard, audit logs.
 - UI: dashboard KPIs & cost decomposition, scenario builder/editor/clone/validate, orders & resources, optimization console with live polling & cancel, SVG warehouse Gantt, run details & audit.
 - Tests: unit, solver, property-based (hypothesis), API integration, queue/persistence; Vitest UI tests.
+
+## [0.3.0] — 2026-10-14 — Phase 2: packing & dock scheduling
+### Added
+- `common/routes.py`: route plans, deterministic time propagation, hard-violation detection & stop-dropping repair, LOAD tasks.
+- Dock dispatch (FIFO readiness / EDD slack) and CP-SAT dock model with exact downstream timing; `dock` problem pipeline (warehouse rule → readiness → baseline grouping → dock appointment → timed routes).
+- Dock & vehicle timeline UI with integrity warnings; `scripts/run_via_api.py`.

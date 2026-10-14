@@ -6,6 +6,7 @@ from collections.abc import Callable
 
 from app.optimization.common.contracts import SchedulingAlgorithm
 from app.optimization.common.registry import register
+from app.optimization.dock.pipeline import DockScheduler
 from app.optimization.warehouse.cp_sat import WarehouseCpSat
 from app.optimization.warehouse.heuristics import DispatchRuleScheduler
 
@@ -20,6 +21,26 @@ for _rule, _desc in (
     ("spt", "SPT dispatch (shortest processing time) + serial SGS"),
 ):
     register(f"warehouse_{_rule}", ("warehouse",), "heuristic", _desc, _rule_factory(_rule))
+
+
+def _dock_factory(method: str) -> Callable[[], SchedulingAlgorithm]:
+    return lambda: DockScheduler(method)
+
+
+for _m, _desc, _kind in (
+    ("fifo", "Dock FIFO by shipment readiness; EDD warehouse + baseline grouping", "heuristic"),
+    ("edd", "Dock EDD by delivery slack; EDD warehouse + baseline grouping", "heuristic"),
+    ("cpsat", "Dock CP-SAT with exact downstream delivery timing (fixed upstream)", "exact"),
+):
+    register(
+        f"dock_{_m}",
+        ("dock",),
+        _kind,
+        _desc,
+        _dock_factory(_m),
+        requires=("ortools",) if _m == "cpsat" else (),
+        phase="P2",
+    )
 
 register(
     "warehouse_cpsat",
