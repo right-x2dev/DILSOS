@@ -63,3 +63,16 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | Honest provenance: synthetic coordinates, euclidean travel, schematic straight lines, no optimality claims | TESTED | API `test_routing_run_publishes_routes_and_stops` (gap = null); UI `phase3.test.tsx` |
 | Routes UI: schematic SVG (default), optional OSM map (lazy, tile-error fallback), route/stop table | TESTED | `phase3.test.tsx`; manual browser check (OSM tiles loaded, 34 overlays) |
 | Routing-only readiness assumption = order release (warehouse not modelled) | IMPLEMENTED | documented in pipeline docstring, metadata and validator R8 |
+
+## Phase 4 — Integrated coordination
+
+| Item | Status | Evidence |
+|---|---|---|
+| One-pass sequential decomposition (warehouse → readiness → VRPTW w/ load estimate → docks → repair) | TESTED | `tests/optimization/test_integrated.py`, `test_phase4_api.py` |
+| Iterative coordination (departure cutoffs → tightened warehouse due dates → re-plan; accept only feasible improvements; controlled diversification; budget/iteration/stall stop) | TESTED | `test_demo_integrated_consistent_and_iterative_never_worse_than_its_start`, `test_iterative_improves_on_bottleneck` (bottleneck: 2.37M → 2.12M KRW, late 995 → 845 min, seed 1) |
+| Pick→pack→load→depart→deliver consistency (independent re-check) | TESTED | `assert_chain_consistent`, API timestamp test |
+| No departure before readiness; downstream constraints validated | TESTED | validator D1/R8 + chain checks |
+| Sub-solver options (warehouse fifo/edd/spt/cpsat, routing nn/insertion/ortools, dock edd/fifo/cpsat) | TESTED (default + exact combo, slow test) | `test_integrated_with_exact_subsolvers` (`-m slow`) |
+| Objective decomposition persisted | TESTED | `schedule_runs.metrics.cost`; API metrics test |
+| Integrated journey UI with delay attribution (heuristic, labelled as such) | TESTED | `frontend/src/tests/phase4.test.tsx`; manual browser check (run #9) |
+| Integrated ALNS across all layers (optional research) | TODO | spec marks optional; routing ALNS is Phase 5 |

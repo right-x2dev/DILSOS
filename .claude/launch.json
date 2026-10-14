@@ -4,7 +4,7 @@
     {
       "name": "api",
       "runtimeExecutable": "C:/Users/User/Documents/IDM_LAB_Assignments/Dynamic Integrated Logistics Scheduling & Optimization System (DILSOS)/backend/.venv/Scripts/python.exe",
-      "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--port", "8000", "--app-dir", "backend"],
+      "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--port", "8000", "--app-dir", "backend", "--reload", "--reload-dir", "app"],
       "cwd": "backend",
       "port": 8000
     },

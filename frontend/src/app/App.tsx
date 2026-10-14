@@ -5,6 +5,7 @@ import { LoginPage } from "../features/auth/LoginPage";
 import { DashboardPage } from "../features/dashboard/DashboardPage";
 import { DockPage } from "../features/docks/DockPage";
 import { GanttPage } from "../features/gantt/GanttPage";
+import { JourneyPage } from "../features/journey/JourneyPage";
 import { OptimizePage } from "../features/optimize/OptimizePage";
 import { OrdersPage } from "../features/orders/OrdersPage";
 import { ComingSoon } from "../features/placeholder/ComingSoon";
@@ -40,7 +41,7 @@ export function App() {
         <Route path="gantt" element={<GanttPage />} />
         <Route path="docks" element={<DockPage />} />
         <Route path="routes" element={<RoutesPage />} />
-        <Route path="journey" element={<ComingSoon title="통합 타임라인" phase="Phase 4" />} />
+        <Route path="journey" element={<JourneyPage />} />
         <Route path="disruptions" element={<ComingSoon title="교란 시뮬레이터" phase="Phase 6" />} />
         <Route path="compare" element={<ComingSoon title="알고리즘 비교" phase="Phase 5" />} />
         <Route path="runs" element={<RunsPage />} />

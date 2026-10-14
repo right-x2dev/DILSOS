@@ -7,6 +7,8 @@ from collections.abc import Callable
 from app.optimization.common.contracts import SchedulingAlgorithm
 from app.optimization.common.registry import register
 from app.optimization.dock.pipeline import DockScheduler
+from app.optimization.integrated.decomposition import SequentialIntegrated
+from app.optimization.integrated.iterative import IterativeIntegrated
 from app.optimization.routing.pipeline import RoutingScheduler
 from app.optimization.warehouse.cp_sat import WarehouseCpSat
 from app.optimization.warehouse.heuristics import DispatchRuleScheduler
@@ -62,6 +64,24 @@ for _m, _desc, _kind in (
         requires=("ortools",) if _m == "ortools" else (),
         phase="P3",
     )
+
+register(
+    "integrated_sequential",
+    ("integrated",),
+    "decomposition",
+    "One-pass decomposition: warehouse → readiness → VRPTW → docks → re-evaluate",
+    SequentialIntegrated,
+    phase="P4",
+)
+register(
+    "integrated_iterative",
+    ("integrated",),
+    "decomposition",
+    "Iterative coordination: downstream departure cutoffs fed back to warehouse priorities",
+    IterativeIntegrated,
+    requires=("ortools",),
+    phase="P4",
+)
 
 register(
     "warehouse_cpsat",

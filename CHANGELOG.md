@@ -36,3 +36,10 @@ All notable changes per phase. Dates are UTC.
 - Routes UI: schematic SVG map, optional OpenStreetMap view with synthetic-data labelling and tile-error fallback, per-vehicle stop tables.
 ### Changed
 - Synthetic display anchor moved inland (Seoul area) so derived lat/lon points do not fall into the sea.
+
+## [0.5.0] — 2026-10-14 — Phase 4: integrated coordination
+### Added
+- `integrated_sequential` (one-pass) and `integrated_iterative` (cutoff feedback coordination) with shared sub-solvers and full validation of every candidate.
+- Integrated journey timeline UI (release → pick → pack → dock wait → load → transit → service, lateness and heuristic main-cause attribution).
+### Changed
+- Inventory allocation order is now (priority, release, id) so tightening due dates never changes backorders.

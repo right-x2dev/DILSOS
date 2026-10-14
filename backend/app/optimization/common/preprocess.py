@@ -1,7 +1,8 @@
 """Deterministic pre-processing shared by all algorithms (so comparisons are fair).
 
 * Cancelled orders are removed (reason ``cancelled``, no penalty).
-* Inventory is allocated in (priority desc, due asc, id asc) order; orders that cannot be fully
+* Inventory is allocated in (priority desc, release asc, id asc) order (independent of due dates, so a
+  coordinator that tightens cutoffs never changes which orders are backordered); orders that cannot be fully
   covered become explicit backorders (reason ``insufficient_inventory``) — inventory never goes negative.
 * Orders with a task that has no eligible resource are unserved (``no_eligible_resource``).
 * For routing scopes, orders heavier/bulkier than every available vehicle are unserved
@@ -33,7 +34,7 @@ def prepare(snap: ScenarioSnapshot, routing: bool) -> Prepared:
     max_l = max((v.capacity_l for v in vehicles), default=0)
 
     inv = dict(snap.inventory)
-    ordered = sorted(snap.orders, key=lambda o: (-o.priority, o.due_min, o.id))
+    ordered = sorted(snap.orders, key=lambda o: (-o.priority, o.release_min, o.id))
     servable: list[str] = []
     for o in ordered:
         if o.id in cancelled:
