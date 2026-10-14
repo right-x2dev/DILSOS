@@ -141,3 +141,9 @@ improves the bottleneck scenario by 10.4 % total cost vs sequential and equals i
   live integrations, stochastic simulation (SimPy).
 * Integrated ALNS spanning warehouse + routing moves (spec "optional research").
 * SSE push updates (polling is used, as the spec allows initially).
+
+## Publication
+| Item | Status | Evidence |
+|---|---|---|
+| Local git history (one commit per phase) | DONE | `git log` |
+| New public GitHub repository + push | BLOCKED (owner action) | GitHub CLI install via winget is waiting for Windows admin (UAC) approval and `gh auth login` must be done by the owner; then run `powershell -ExecutionPolicy Bypass -File scripts\publish_github.ps1` |
