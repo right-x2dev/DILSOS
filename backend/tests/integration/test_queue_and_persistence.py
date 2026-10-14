@@ -41,7 +41,8 @@ def test_db_worker_claims_and_runs(db):
 
     n = run_forever(poll_s=0.01, once=True)
     assert n >= 1
-    db.expire_all()
+    db.rollback()  # end the read txn (MySQL REPEATABLE READ would show a stale snapshot)
+    db.expire_all()  # rollback is a no-op without an open txn; drop cached state
     assert db.get(m.ScheduleRun, run.id).status == "SUCCEEDED"
 
 
@@ -50,7 +51,8 @@ def test_claim_is_atomic(db):
     run = run_svc.enqueue_run(db, sc, "warehouse", "warehouse_fifo", 2, 0, {}, None, dispatch=False)
     assert run_svc.claim_run(db, run.id, "w1") is True
     assert run_svc.claim_run(db, run.id, "w2") is False
-    db.expire_all()
+    db.rollback()  # end the read txn (MySQL REPEATABLE READ would show a stale snapshot)
+    db.expire_all()  # rollback is a no-op without an open txn; drop cached state
     assert db.get(m.ScheduleRun, run.id).worker_id == "w1"
 
 
@@ -79,7 +81,8 @@ def test_invalid_schedule_is_never_published(db, monkeypatch):
     monkeypatch.setattr(run_svc, "run_algorithm", fake_run)
     status = run_svc.execute_run(run.id, "w")
     assert status == "FAILED"
-    db.expire_all()
+    db.rollback()  # end the read txn (MySQL REPEATABLE READ would show a stale snapshot)
+    db.expire_all()  # rollback is a no-op without an open txn; drop cached state
     r = db.get(m.ScheduleRun, run.id)
     assert r.is_feasible is False and "validation error" in r.error_message
     assert db.scalar(select(m.ScheduleAssignment).where(m.ScheduleAssignment.run_id == run.id)) is None
@@ -96,7 +99,8 @@ def test_solver_exception_marks_failed(db, monkeypatch):
 
     monkeypatch.setattr(heuristics.DispatchRuleScheduler, "solve", boom)
     assert run_svc.execute_run(run.id, "w") == "FAILED"
-    db.expire_all()
+    db.rollback()  # end the read txn (MySQL REPEATABLE READ would show a stale snapshot)
+    db.expire_all()  # rollback is a no-op without an open txn; drop cached state
     assert "solver exploded" in db.get(m.ScheduleRun, run.id).error_message
 
 

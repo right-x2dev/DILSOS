@@ -9,7 +9,7 @@ from sqlalchemy import (
     JSON,
     Boolean,
     Date,
-    Float,
+    Double,
     ForeignKey,
     Index,
     Integer,
@@ -116,7 +116,7 @@ class ScheduleRun(Base):
     algorithm: Mapped[str] = mapped_column(String(64), index=True)
     params: Mapped[dict] = mapped_column(JSON)
     seed: Mapped[int] = mapped_column(Integer, default=0)
-    time_limit_s: Mapped[float] = mapped_column(Float, default=10.0)
+    time_limit_s: Mapped[float] = mapped_column(Double, default=10.0)
     status: Mapped[str] = mapped_column(String(16), default="QUEUED")
     solver_status: Mapped[str | None] = mapped_column(String(16), nullable=True)
     progress: Mapped[int] = mapped_column(Integer, default=0)
@@ -241,7 +241,7 @@ class RescheduleRun(Base):
     status: Mapped[str] = mapped_column(String(16), default="QUEUED")
     changed_tasks: Mapped[int | None] = mapped_column(Integer, nullable=True)
     changed_routes: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    stability_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    stability_score: Mapped[float | None] = mapped_column(Double, nullable=True)
     summary: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow)

@@ -8,7 +8,7 @@ from decimal import Decimal
 from sqlalchemy import (
     JSON,
     Boolean,
-    Float,
+    Double,
     ForeignKey,
     Index,
     Integer,
@@ -30,10 +30,10 @@ class Facility(Base):
     code: Mapped[str] = mapped_column(String(32), unique=True)
     name: Mapped[str] = mapped_column(String(120))
     timezone: Mapped[str] = mapped_column(String(64), default="Asia/Seoul")
-    x_km: Mapped[float] = mapped_column(Float, default=0.0)
-    y_km: Mapped[float] = mapped_column(Float, default=0.0)
-    lat: Mapped[float | None] = mapped_column(Float, nullable=True)
-    lon: Mapped[float | None] = mapped_column(Float, nullable=True)
+    x_km: Mapped[float] = mapped_column(Double, default=0.0)
+    y_km: Mapped[float] = mapped_column(Double, default=0.0)
+    lat: Mapped[float | None] = mapped_column(Double, nullable=True)
+    lon: Mapped[float | None] = mapped_column(Double, nullable=True)
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow)
 
 
@@ -44,10 +44,10 @@ class Customer(Base):
     facility_id: Mapped[int] = mapped_column(ForeignKey("facilities.id", ondelete="RESTRICT"), index=True)
     code: Mapped[str] = mapped_column(String(32))
     name: Mapped[str] = mapped_column(String(120))
-    x_km: Mapped[float] = mapped_column(Float)
-    y_km: Mapped[float] = mapped_column(Float)
-    lat: Mapped[float | None] = mapped_column(Float, nullable=True)
-    lon: Mapped[float | None] = mapped_column(Float, nullable=True)
+    x_km: Mapped[float] = mapped_column(Double)
+    y_km: Mapped[float] = mapped_column(Double)
+    lat: Mapped[float | None] = mapped_column(Double, nullable=True)
+    lon: Mapped[float | None] = mapped_column(Double, nullable=True)
     service_min: Mapped[int] = mapped_column(Integer, default=8)
     tw_start_local_min: Mapped[int] = mapped_column(Integer)
     tw_end_local_min: Mapped[int] = mapped_column(Integer)
