@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../api/client";
 import { useAuth } from "../features/auth/authStore";
 import { Badge, cx } from "../components/ui";
+import { ScenarioPicker } from "../components/ScenarioPicker";
 import { NAV } from "./nav";
 
 type Ready = { status: string; task_backend: string; database_dialect: string };
@@ -65,7 +66,7 @@ export function Layout() {
               </NavLink>
             ))}
           </nav>
-          <div className="hidden text-sm text-ink-600 md:block">시간 표시: 시나리오 기준 상대시간(분) + UTC</div>
+          <ScenarioPicker />
           <div className="flex items-center gap-3">
             <HealthBadge />
             <span className="text-sm text-ink-600">{user?.display_name}</span>

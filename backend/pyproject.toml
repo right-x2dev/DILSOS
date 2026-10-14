@@ -20,6 +20,7 @@ dependencies = [
   "ortools>=9.10",
   "numpy>=1.26",
   "scipy>=1.13",
+  "tzdata>=2024.1",
 ]
 
 [project.optional-dependencies]
@@ -48,13 +49,13 @@ markers = [
 ]
 
 [tool.ruff]
-line-length = 110
+line-length = 120
 target-version = "py312"
 extend-exclude = ["app/db/migrations/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
-ignore = ["B008"]
+ignore = ["B008", "UP046"]
 
 [tool.mypy]
 python_version = "3.12"

@@ -29,3 +29,15 @@ The agent does not handle the MySQL root password. `scripts/mysql_init.sql` crea
 
 ## ADR-008 — Publication
 New **public** GitHub repository, separate from the existing production-scheduler project. GitHub CLI installed via winget; authentication is performed by the owner.
+
+## ADR-009 — One synthetic facility per demo scenario
+Each generated "world" (customers, SKUs, orders with codes like `O0001`) gets its own facility code (`DC-NORMAL`, `DC-PEAK`, …) so order/customer codes stay unique per facility without renaming. Real deployments would use one facility with many scenarios (scenarios select orders via `scenario_orders`).
+
+## ADR-010 — Snapshot document stored as JSON
+`scenario_snapshots.content` stores the full `ScenarioSnapshot` (incl. travel matrix) as JSON with a SHA-256 content hash; identical consecutive snapshots are deduplicated. This deliberately exceeds "bounded metadata" because the snapshot *is* the reproducibility record; queryable projections are also written to `tasks`, `task_dependencies`, `travel_matrices`, `travel_matrix_entries`.
+
+## ADR-011 — CP-SAT usage
+OR-Tools ≥ 9.10 snake_case API. Default 8 search workers (better incumbents) ⇒ results under a time limit are not bit-reproducible; `params.num_workers=1` gives deterministic runs (recorded in `solver_metadata.deterministic`). The CP-SAT objective adds a 1 KRW/min completion tie-break; comparisons always use the shared evaluator, and the reported gap refers to the solver's own objective.
+
+## ADR-012 — Dispatch rules use one shared serial SGS
+FIFO/EDD/SPT only change task priority; placement is a gap-filling serial schedule-generation scheme over multi-resource requirements (picker [+ zone skill] [+ forklift], packer + station). The same decoder is reused by SA/Tabu/GA so their encodings are feasible by construction.

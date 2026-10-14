@@ -12,3 +12,13 @@ All notable changes per phase. Dates are UTC.
 - React + TS + Vite shell: login, sidebar navigation (Korean labels), demo banner, API health badge, explicitly-labelled “준비 중” placeholders.
 - Dockerfiles (api/worker, nginx frontend reverse proxy), `docker-compose.yml`, `docker-compose.prod.yml`, GitHub Actions CI (ruff, mypy, pytest on SQLite + MySQL, vitest, build, compose smoke).
 - `scripts/mysql_init.sql`, `scripts/smoke_test.py`.
+
+## [0.2.0] — 2026-10-14 — Phase 1: warehouse vertical slice
+### Added
+- Optimization core: typed contracts, deterministic preprocessing (inventory allocation, explicit unserved reasons), resource timelines, serial SGS, FIFO/EDD/SPT dispatch, CP-SAT warehouse model, shared evaluator, independent validator, algorithm registry & runner.
+- Full domain schema (migration 0002), immutable outputs guard, scenario snapshots (versioned, hashed), definition ⇄ DB round trip.
+- Synthetic generator + demo scenarios `normal_day`, `peak_demand`, `vehicle_breakdown`, `warehouse_bottleneck`; seed CLI.
+- Run lifecycle (202 enqueue, atomic claim, cancel, timeout cap, publish-only-if-valid), DB-polling worker, Celery task.
+- REST API for scenarios, orders, resources, runs, schedule/validation/metrics/compare, algorithms, dashboard, audit logs.
+- UI: dashboard KPIs & cost decomposition, scenario builder/editor/clone/validate, orders & resources, optimization console with live polling & cancel, SVG warehouse Gantt, run details & audit.
+- Tests: unit, solver, property-based (hypothesis), API integration, queue/persistence; Vitest UI tests.

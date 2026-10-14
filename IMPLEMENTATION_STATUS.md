@@ -2,7 +2,7 @@
 
 Statuses: `TODO` · `IN_PROGRESS` · `IMPLEMENTED` (code exists, not fully verified) · `TESTED` (automated tests pass, evidence linked) · `BLOCKED`.
 
-_Last updated: 2026-10-14 — end of Phase 0._
+_Last updated: 2026-10-14 — end of Phase 1._
 
 ## Phase 0 — Bootstrap
 
@@ -18,3 +18,22 @@ _Last updated: 2026-10-14 — end of Phase 0._
 | Dockerfiles + compose (dev/prod) | IMPLEMENTED | Not run locally (no Docker on dev machine); verified by CI job `compose-smoke` once pushed |
 | CI workflow | IMPLEMENTED | `.github/workflows/ci.yml` — result pending first push |
 | Local MySQL | BLOCKED (owner action) | Run `scripts/mysql_init.sql` as root; until then local runtime uses SQLite. CI tests on MySQL 8.4 |
+
+## Phase 1 — Warehouse vertical slice
+
+| Item | Status | Evidence |
+|---|---|---|
+| Typed contracts (`ScenarioSnapshot`, `SolveConfig`, `ScheduleResult`, `ValidationReport`, …) | TESTED | `app/optimization/common/contracts.py`; used by every test |
+| Full MySQL schema (27 spec tables + `scenario_orders`) + migration 0002 | TESTED | migrated per test session; CI re-runs on MySQL 8.4 |
+| Immutable published outputs (ORM guard) | TESTED | `test_published_outputs_are_immutable` |
+| Deterministic synthetic generator + 4 demo scenarios | TESTED | `tests/unit/test_generator.py` (reproducibility, refs, durations, feasible/infeasible) |
+| Definition ⇄ DB ⇄ snapshot lossless round trip; snapshot versioning/dedup | TESTED | `test_definition_round_trip_is_lossless`, `test_snapshot_versioning_on_master_change` |
+| Inventory allocation / explicit backorders | TESTED | `test_inventory_shortage_creates_backorders`, `test_inventory_negative_detected` |
+| Warehouse FIFO / EDD / SPT (serial SGS, multi-resource) | TESTED | `tests/optimization/test_warehouse_solvers.py` |
+| Warehouse CP-SAT (optional intervals, shifts/downtime, EDD warm start, gap, cancel) | TESTED | `test_cpsat_certifies_optimality_on_tiny…`, `test_cpsat_cancellation_stops_early` |
+| Independent validator (U1, W1–W10 + D/R rules) | TESTED (W rules) | `tests/unit/test_validator_warehouse.py`, `tests/property/test_validator_properties.py` (hypothesis) |
+| Shared evaluator (cost decomposition, KPIs) | TESTED | `test_objective_terms_are_recomputable` |
+| Run queue: eager / DB-poller / Celery; atomic claim; cancel; failure; publish-only-if-valid | TESTED (eager, db) / IMPLEMENTED (celery, CI compose) | `tests/integration/test_queue_and_persistence.py` |
+| API: scenarios (build/patch/clone/validate/geo), orders, resources, runs, schedule, validation, metrics, compare, algorithms, dashboard, audit | TESTED | `tests/integration/test_phase1_api.py` |
+| UI: dashboard, scenarios/builder, orders & resources, optimization console, warehouse Gantt, runs/audit | TESTED | `frontend/src/tests/phase1.test.tsx`; manual: CP-SAT run via DB worker → Gantt in browser |
+| CSV import / export buttons | TODO (Phase 7) | rendered disabled with “준비 중” label |

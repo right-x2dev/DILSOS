@@ -9,6 +9,13 @@
       "port": 8000
     },
     {
+      "name": "worker",
+      "runtimeExecutable": "C:/Users/User/Documents/IDM_LAB_Assignments/Dynamic Integrated Logistics Scheduling & Optimization System (DILSOS)/backend/.venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "app.tasks.db_worker", "--poll", "0.5"],
+      "cwd": "backend",
+      "port": 8001
+    },
+    {
       "name": "web",
       "runtimeExecutable": "node",
       "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "5173", "--strictPort"],

@@ -27,9 +27,7 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
 
     id: Mapped[int] = mapped_column(PK, primary_key=True, autoincrement=True)
-    user_id: Mapped[int | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True
-    )
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True)
     action: Mapped[str] = mapped_column(String(64), index=True)
     entity_type: Mapped[str] = mapped_column(String(64))
     entity_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
