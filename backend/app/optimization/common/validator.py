@@ -74,6 +74,8 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
     H = snap.horizon_min
     cancelled = set(snap.cancelled_order_ids)
     frozen = {f.task_id: f for f in snap.frozen_assignments}
+    frozen_rt = {fr.vehicle_id: fr for fr in snap.frozen_routes}
+    frozen_loads = {f"LOAD-{vid}" for vid in frozen_rt}
     unserved_ids = set(result.unserved_order_ids)
 
     # ---------------- U1: explicit unserved ----------------
@@ -217,7 +219,7 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
                     b_start=s2,
                 )
         for s, e, tid in items:
-            if tid in frozen:
+            if tid in frozen or tid in frozen_loads:
                 continue
             if not any(i.start <= s and e <= i.end for i in res.available):
                 v.add(
@@ -244,7 +246,22 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
             if not rt.stops:
                 continue
             la = load_by_vehicle.get(rt.vehicle_id)
-            frozen_route = any(fr.vehicle_id == rt.vehicle_id for fr in snap.frozen_routes)
+            frozen_route = rt.vehicle_id in frozen_rt
+            if frozen_route:
+                v.rule("F1")
+                fr0 = frozen_rt[rt.vehicle_id]
+                if fr0.route is not None and rt.model_dump() != fr0.route.model_dump():
+                    v.add("F1", "route", rt.vehicle_id, "executed/committed route was changed", reason=fr0.reason)
+                continue
+            if rt.load_start_min is not None and rt.load_start_min < snap.current_time_min:
+                v.add(
+                    "W3",
+                    "route",
+                    rt.vehicle_id,
+                    "re-planned loading starts in the past",
+                    load_start=rt.load_start_min,
+                    now=snap.current_time_min,
+                )
             if la is None or rt.dock_id is None:
                 v.add("D3", "route", rt.vehicle_id, "route has no dock loading assignment")
                 continue
@@ -317,6 +334,24 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
             vehicles_seen.add(r.vehicle_id)
             if not r.stops:
                 continue
+            if r.vehicle_id in frozen_rt:
+                v.rule("F1")
+                fr1 = frozen_rt[r.vehicle_id]
+                if fr1.route is not None and r.model_dump() != fr1.route.model_dump():
+                    v.add("F1", "route", r.vehicle_id, "executed/committed route was changed", reason=fr1.reason)
+                for st in r.stops:
+                    for oid in st.order_ids:
+                        delivered[oid] += 1
+                continue
+            if r.departure_min < snap.current_time_min:
+                v.add(
+                    "W3",
+                    "route",
+                    r.vehicle_id,
+                    "re-planned departure in the past",
+                    departure=r.departure_min,
+                    now=snap.current_time_min,
+                )
             if not veh.available:
                 v.add("R5", "route", r.vehicle_id, "unavailable vehicle dispatched")
             stop_orders = [o for x in r.stops for o in x.order_ids]
@@ -456,7 +491,15 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
                 v.add("R1", "order", oid, "served order not delivered exactly once", deliveries=n)
         for oid in unserved_ids:
             if delivered.get(oid, 0):
-                v.add("R1", "order", oid, "unserved order appears on a route")
+                on_frozen = any(oid in fr.order_ids for fr in snap.frozen_routes)
+                v.add(
+                    "R1",
+                    "order",
+                    oid,
+                    "unserved order appears on a route"
+                    + (" (already loaded/departed before the event — exception)" if on_frozen else ""),
+                    severity="warning" if on_frozen else "error",
+                )
 
     unserved: list[UnservedOrder] = list(result.unserved) or unserved_list(
         snap, {o: reasons.get(o, "unspecified") for o in unserved_ids}

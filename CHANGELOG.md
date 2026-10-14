@@ -50,3 +50,14 @@ All notable changes per phase. Dates are UTC.
 - Routing ALNS with adaptive operator weights; available standalone and inside integrated coordination.
 - Benchmark harness `app.experiments.benchmark` + generated quick-suite results in `docs/experiments/`.
 - `POST /scenarios/{id}/experiments` (algorithms × seeds on one snapshot) and the comparison dashboard (stats, charts, CSV).
+
+## [0.7.0] — 2026-10-14 — Phase 6: dynamic events & rescheduling
+### Added
+- Disruption event engine (7 event types), freeze/neighbourhood logic, KEEP/PARTIAL/FULL rescheduling algorithms, rolling-horizon driver, rule-based policy recommendation.
+- Snapshot fields for task model, events applied, KEEP freeze sets → rescheduled runs are reproducible from the stored snapshot alone.
+- Validator: frozen-route identity (F1), no re-planned loading/departure in the past, cancelled-on-loaded-route as warning.
+- API: `POST/GET /scenarios/{id}/events` (Idempotency-Key), `POST /runs/{id}/reschedule`, `GET /runs/{id}/reschedules`.
+- Disruption simulator UI with before/after comparison.
+### Fixed
+- Policy recommendation was dominated by runtime ratios (3 ms vs 300 ms); now min-max normalised per criterion.
+- Run pickers showed the first option while nothing was selected.

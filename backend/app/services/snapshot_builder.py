@@ -20,15 +20,14 @@ from app.optimization.common.contracts import (
     Interval,
     Location,
     Order,
-    OrderLine,
     Resource,
-    ResourceRequirement,
     ScenarioSnapshot,
     Sku,
     Task,
     TravelMatrix,
     Vehicle,
 )
+from app.optimization.common.tasks import make_order
 from app.schemas.scenario_def import ScenarioDefinition
 
 DEPOT_ID = "DEPOT"
@@ -123,7 +122,6 @@ def build_snapshot(d: ScenarioDefinition, scenario_id: str = "local", version: i
         )
         for c in d.customers
     ]
-    skus = {s.code: s for s in d.skus}
     resources: list[Resource] = []
     for w in d.workers:
         resources.append(
@@ -171,60 +169,31 @@ def build_snapshot(d: ScenarioDefinition, scenario_id: str = "local", version: i
 
     orders: list[Order] = []
     tasks: list[Task] = []
-    workers = [w for w in d.workers]
-    stations = [p.code for p in d.pack_stations]
-    forklifts = [e.code for e in d.equipment if e.kind == "forklift"]
+    sku_models = {
+        sc.code: Sku(
+            id=sc.code,
+            zone=sc.zone,
+            unit_weight_g=sc.unit_weight_g,
+            unit_volume_ml=sc.unit_volume_ml,
+            pick_sec_per_unit=sc.pick_sec_per_unit,
+        )
+        for sc in d.skus
+    }
+    tm_dict = tm.model_dump()
     for o in sorted(d.orders, key=lambda x: x.code):
-        units = sum(ln.qty for ln in o.lines)
-        wt_g = sum(ln.qty * skus[ln.sku_code].unit_weight_g for ln in o.lines)
-        vol_ml = sum(ln.qty * skus[ln.sku_code].unit_volume_ml for ln in o.lines)
-        weight_kg, volume_l = math.ceil(wt_g / 1000), math.ceil(vol_ml / 1000)
-        rel = max(0, clk.rel(o.release_local))
-        orders.append(
-            Order(
-                id=o.code,
-                customer_id=o.customer_code,
-                release_min=rel,
-                due_min=clk.rel(o.due_local),
-                priority=o.priority,
-                lines=[OrderLine(sku_id=ln.sku_code, qty=ln.qty) for ln in o.lines],
-                weight_kg=weight_kg,
-                volume_l=volume_l,
-                units=units,
-            )
+        order, otasks = make_order(
+            o.code,
+            o.customer_code,
+            max(0, clk.rel(o.release_local)),
+            clk.rel(o.due_local),
+            o.priority,
+            [(ln.sku_code, ln.qty) for ln in o.lines],
+            sku_models,
+            resources,
+            tm_dict,
         )
-        zones = sorted({skus[ln.sku_code].zone for ln in o.lines})
-        need = {"pick"} | {tm.zone_skill[z] for z in zones if z in tm.zone_skill}
-        pickers = [w.code for w in workers if need <= set(w.skills)]
-        pick_sec = sum(ln.qty * skus[ln.sku_code].pick_sec_per_unit for ln in o.lines)
-        pick_req = [ResourceRequirement(kind="worker", eligible_ids=pickers)]
-        if weight_kg > tm.forklift_weight_kg:
-            pick_req.append(ResourceRequirement(kind="equipment", eligible_ids=forklifts))
-        tasks.append(
-            Task(
-                id=f"{o.code}-PICK",
-                order_id=o.code,
-                type="PICK",
-                release_min=rel,
-                requirements=pick_req,
-                duration_min=tm.pick_base_min + len(zones) * 2 + math.ceil(pick_sec / 60),
-            )
-        )
-        packers = [w.code for w in workers if "pack" in w.skills]
-        tasks.append(
-            Task(
-                id=f"{o.code}-PACK",
-                order_id=o.code,
-                type="PACK",
-                release_min=rel,
-                requirements=[
-                    ResourceRequirement(kind="worker", eligible_ids=packers),
-                    ResourceRequirement(kind="pack_station", eligible_ids=stations),
-                ],
-                duration_min=tm.pack_base_min + math.ceil(units * tm.pack_sec_per_unit / 60),
-                predecessors=[f"{o.code}-PICK"],
-            )
-        )
+        orders.append(order)
+        tasks.extend(otasks)
 
     vehicles = [
         Vehicle(
@@ -279,6 +248,7 @@ def build_snapshot(d: ScenarioDefinition, scenario_id: str = "local", version: i
         resources=resources,
         vehicles=vehicles,
         travel=travel,
+        task_model=tm_dict,
         params=d.params,
         weights=d.weights,
         cancelled_order_ids=sorted(o.code for o in d.orders if o.status == "CANCELLED"),

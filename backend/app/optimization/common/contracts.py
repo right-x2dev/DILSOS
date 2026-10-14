@@ -149,6 +149,12 @@ class FrozenAssignment(_M):
 
 
 class FrozenRoute(_M):
+    """A route that must not change (executed history or committed near-term plan).
+
+    ``route`` is the full timed record copied verbatim into any new schedule version, so historical
+    execution is never re-computed or rewritten (even if travel times change afterwards).
+    """
+
     vehicle_id: str
     order_ids: list[str]
     dock_id: str | None
@@ -156,6 +162,7 @@ class FrozenRoute(_M):
     load_end: int
     departure_min: int
     reason: Literal["completed", "in_progress", "committed"] = "committed"
+    route: VehicleRoute | None = None
 
 
 class ScenarioSnapshot(_M):
@@ -178,6 +185,8 @@ class ScenarioSnapshot(_M):
     travel: TravelMatrix
     params: ScenarioParams = ScenarioParams()
     weights: ObjectiveWeights = ObjectiveWeights()
+    task_model: dict[str, Any] = {}  # TaskModelParams used to derive tasks (needed for urgent orders)
+    events_applied: list[dict[str, Any]] = []  # provenance of disruption events folded into this snapshot
     # Rescheduling context
     current_time_min: int = 0  # nothing new may start before this
     frozen_assignments: list[FrozenAssignment] = []
@@ -185,6 +194,10 @@ class ScenarioSnapshot(_M):
     cancelled_order_ids: list[str] = []
     baseline_assignments: list[TaskAssignment] = []  # previous plan (stability measurement)
     baseline_routes: list[VehicleRoute] = []
+    # KEEP-policy freeze sets (superset of this snapshot's freeze) → minimal-change candidate
+    keep_frozen_assignments: list[FrozenAssignment] = []
+    keep_frozen_routes: list[FrozenRoute] = []
+    reschedule_policy: str | None = None
 
     def order_map(self) -> dict[str, Order]:
         return {o.id: o for o in self.orders}
@@ -364,4 +377,5 @@ class SchedulingAlgorithm(Protocol):
     ) -> ScheduleResult: ...
 
 
+FrozenRoute.model_rebuild()
 ScenarioSnapshot.model_rebuild()

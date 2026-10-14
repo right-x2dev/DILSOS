@@ -22,7 +22,8 @@ export function RunPicker({ types, label = "실행(run)", value, onChange }: { t
   return (
     <label className="flex items-center gap-2 text-sm">
       <span className="text-ink-600">{label}</span>
-      <select aria-label={label} className={`${inputCls} max-w-[22rem] py-1`} value={current ?? ""} onChange={(e) => set(Number(e.target.value))}>
+      <select aria-label={label} className={`${inputCls} max-w-[22rem] py-1`} value={current ?? ""} onChange={(e) => set(e.target.value ? Number(e.target.value) : null)}>
+        {!runs.some((r) => r.id === current) && <option value="">선택…</option>}
         {runs.map((r) => (
           <option key={r.id} value={r.id}>
             #{r.id} {r.algorithm} · {r.problem_type} · v{r.schedule_version} · {r.solver_status}

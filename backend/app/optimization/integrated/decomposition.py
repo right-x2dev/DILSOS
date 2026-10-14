@@ -126,7 +126,8 @@ def compose(
     t0 = time.perf_counter()
     ctx = Ctx(snap)
     wh, pack_end, reasons, wh_meta = warehouse_plan(work, st, cancel)
-    packed = sorted(o for o in pack_end if o not in reasons)
+    fr_orders = {o for fr in snap.frozen_routes for o in fr.order_ids}  # already on an executed/committed route
+    packed = sorted(o for o in pack_end if o not in reasons and o not in fr_orders)
     units = build_units(ctx, packed, pack_end)
     sim = Simulator(ctx, load_fn=ctx.load_minutes)
     routes_u, left, r_meta = route_orders(ctx, sim, units, st, cancel, warm_routes)
@@ -141,6 +142,12 @@ def compose(
     reasons.update(out.unserved)
     assignments = [a for a in wh if a.frozen or a.order_ids[0] not in reasons]
     assignments += [load_assignment(r) for r in out.routes]
+    # frozen routes are copied verbatim (history is never re-timed or rewritten)
+    for fr in snap.frozen_routes:
+        if fr.route is not None:
+            out.routes.append(fr.route)
+            if fr.route.dock_id and fr.route.load_start_min is not None:
+                assignments.append(load_assignment(fr.route).model_copy(update={"frozen": True}))
     res = ScheduleResult(
         run_id="",
         algorithm=name,

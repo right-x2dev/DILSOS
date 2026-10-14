@@ -9,6 +9,7 @@ from app.optimization.common.registry import register
 from app.optimization.dock.pipeline import DockScheduler
 from app.optimization.integrated.decomposition import SequentialIntegrated
 from app.optimization.integrated.iterative import IterativeIntegrated
+from app.optimization.rescheduling.rolling_horizon import RescheduleAlgorithm
 from app.optimization.routing.pipeline import RoutingScheduler
 from app.optimization.warehouse.cp_sat import WarehouseCpSat
 from app.optimization.warehouse.heuristics import DispatchRuleScheduler
@@ -87,6 +88,25 @@ for _m, _desc in (
     ("ga", "Genetic algorithm (OX crossover, swap mutation, elitism) over order permutations"),
 ):
     register(f"warehouse_{_m}", ("warehouse",), "metaheuristic", _desc, _meta_factory(_m), stochastic=True, phase="P5")
+
+
+def _resched_factory(policy: str) -> Callable[[], SchedulingAlgorithm]:
+    return lambda: RescheduleAlgorithm(policy)  # type: ignore[arg-type]
+
+
+for _p, _desc in (
+    ("KEEP", "Rescheduling KEEP: keep unaffected work, minimal repair of directly affected work"),
+    ("PARTIAL", "Rescheduling PARTIAL: re-optimise the affected neighbourhood (+ unstarted routes)"),
+    ("FULL", "Rescheduling FULL: re-optimise everything not executed/committed"),
+):
+    register(
+        f"reschedule_{_p.lower()}",
+        ("warehouse", "integrated"),
+        "decomposition",
+        _desc,
+        _resched_factory(_p),
+        phase="P6",
+    )
 
 register(
     "integrated_sequential",

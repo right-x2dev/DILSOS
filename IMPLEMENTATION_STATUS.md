@@ -91,3 +91,18 @@ _Last updated: 2026-10-14 — end of Phase 1._
 Selected measured results (quick suite, 5 s budget): CP-SAT best on every warehouse instance (gap 0 on small-s1);
 ALNS (≤150 iterations, 0.05–0.8 s) within 0–0.4 % of OR-Tools' 5 s solution on best-of-5 (equal on small-s1/s2); integrated iterative
 improves the bottleneck scenario by 10.4 % total cost vs sequential and equals it on the small instances.
+
+## Phase 6 — Dynamic events & rescheduling
+
+| Item | Status | Evidence |
+|---|---|---|
+| Event engine: urgent order, worker absence, pack-station outage, dock outage, vehicle breakdown, travel-time increase, order cancellation | TESTED | `tests/optimization/test_rescheduling.py` (7 events × 3 policies) |
+| No preemption (absence/outage after in-progress work), breakdown-after-departure & late cancellation reported as explicit exceptions | TESTED | `test_absence_respects_no_preemption`, `test_breakdown_after_departure_is_reported_not_rewritten` |
+| Freeze logic: executed history, committed window, affected closure; PARTIAL neighbourhood | TESTED | history/past/validation assertions in every event×policy test |
+| KEEP / PARTIAL / FULL algorithms (KEEP candidate evaluated inside PARTIAL/FULL; never claims optimality) | TESTED | `test_keep_changes_least_and_full_is_cheapest_or_equal_for_breakdown` |
+| History-tamper detection (W10 tasks, F1 routes), no re-planning into the past (W3) | TESTED | `test_tampering_with_history_is_detected` |
+| Rolling horizon over an event stream (only feasible versions adopted) | TESTED | `test_rolling_horizon_accumulates_history` |
+| Stability metrics (changed tasks/routes, stability score, change penalty) | TESTED | evaluator; API summary |
+| Rule-based policy selector with min-max normalised weights + human-readable reason | TESTED | `test_recommendation_is_transparent`, `test_recommendation_not_dominated_by_runtime_scale` (regression found in browser check) |
+| API: idempotent events (201/200/409), versioned reschedule runs (parent + schedule_version+1, per-policy idempotency, optimistic version guard), summary + recommendation | TESTED | `tests/integration/test_phase6_api.py`; live API + DB worker run (base #10 → #11–#13) |
+| Disruption simulator UI (event form, event list, policy runs, comparison, recommendation weights, before/after Gantt + route diff) | TESTED | `frontend/src/tests/phase6.test.tsx`; manual browser check |
