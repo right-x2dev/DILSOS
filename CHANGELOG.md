@@ -28,3 +28,11 @@ All notable changes per phase. Dates are UTC.
 - `common/routes.py`: route plans, deterministic time propagation, hard-violation detection & stop-dropping repair, LOAD tasks.
 - Dock dispatch (FIFO readiness / EDD slack) and CP-SAT dock model with exact downstream timing; `dock` problem pipeline (warehouse rule → readiness → baseline grouping → dock appointment → timed routes).
 - Dock & vehicle timeline UI with integrity warnings; `scripts/run_via_api.py`.
+
+## [0.4.0] — 2026-10-14 — Phase 3: vehicle routing
+### Added
+- Routing units & simulator; time-oriented nearest neighbour; cheapest insertion; OR-Tools VRPTW (capacity, time, soft/hard windows, disjunctions, readiness, GLS, warm start).
+- `routing` problem pipeline with hard-repair finalisation; validator R8 readiness for routing-only scope.
+- Routes UI: schematic SVG map, optional OpenStreetMap view with synthetic-data labelling and tile-error fallback, per-vehicle stop tables.
+### Changed
+- Synthetic display anchor moved inland (Seoul area) so derived lat/lon points do not fall into the sea.

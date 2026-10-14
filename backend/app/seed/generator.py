@@ -30,7 +30,7 @@ from app.schemas.scenario_def import (
     WorkerDef,
 )
 
-ANCHOR_LAT, ANCHOR_LON = 37.4563, 126.7052  # synthetic DC anchor (Incheon area); display only
+ANCHOR_LAT, ANCHOR_LON = 37.5000, 127.0000  # synthetic DC anchor (Seoul area); display only
 
 TW_SLOTS = [(540, 720), (600, 840), (780, 1020), (840, 1080), (540, 1080), (660, 900)]  # local minutes
 
@@ -73,7 +73,7 @@ def generate(cfg: GeneratorConfig) -> ScenarioDefinition:
     lat, lon = _latlon(0, 0)
     facility = FacilityDef(
         code=cfg.facility_code,
-        name=f"인천 합성 물류센터 {cfg.facility_code} (synthetic)",
+        name=f"수도권 합성 물류센터 {cfg.facility_code} (synthetic)",
         timezone="Asia/Seoul",
         x_km=0,
         y_km=0,

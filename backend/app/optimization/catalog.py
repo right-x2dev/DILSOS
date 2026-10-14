@@ -7,6 +7,7 @@ from collections.abc import Callable
 from app.optimization.common.contracts import SchedulingAlgorithm
 from app.optimization.common.registry import register
 from app.optimization.dock.pipeline import DockScheduler
+from app.optimization.routing.pipeline import RoutingScheduler
 from app.optimization.warehouse.cp_sat import WarehouseCpSat
 from app.optimization.warehouse.heuristics import DispatchRuleScheduler
 
@@ -40,6 +41,26 @@ for _m, _desc, _kind in (
         _dock_factory(_m),
         requires=("ortools",) if _m == "cpsat" else (),
         phase="P2",
+    )
+
+
+def _routing_factory(method: str) -> Callable[[], SchedulingAlgorithm]:
+    return lambda: RoutingScheduler(method)
+
+
+for _m, _desc, _kind in (
+    ("nn", "Time-oriented nearest neighbour VRPTW (+ cheapest insertion of leftovers)", "heuristic"),
+    ("insertion", "Cheapest insertion VRPTW (fixed + distance + lateness cost)", "heuristic"),
+    ("ortools", "OR-Tools Routing VRPTW: capacity/time dimensions, soft/hard windows, GLS", "metaheuristic"),
+):
+    register(
+        f"routing_{_m}",
+        ("routing",),
+        _kind,
+        _desc,
+        _routing_factory(_m),
+        requires=("ortools",) if _m == "ortools" else (),
+        phase="P3",
     )
 
 register(

@@ -8,6 +8,7 @@ import { GanttPage } from "../features/gantt/GanttPage";
 import { OptimizePage } from "../features/optimize/OptimizePage";
 import { OrdersPage } from "../features/orders/OrdersPage";
 import { ComingSoon } from "../features/placeholder/ComingSoon";
+import { RoutesPage } from "../features/routes/RoutesPage";
 import { RunsPage } from "../features/runs/RunsPage";
 import { ScenariosPage } from "../features/scenarios/ScenariosPage";
 import { Layout } from "./Layout";
@@ -38,7 +39,7 @@ export function App() {
         <Route path="optimize" element={<OptimizePage />} />
         <Route path="gantt" element={<GanttPage />} />
         <Route path="docks" element={<DockPage />} />
-        <Route path="routes" element={<ComingSoon title="배송 경로" phase="Phase 3" />} />
+        <Route path="routes" element={<RoutesPage />} />
         <Route path="journey" element={<ComingSoon title="통합 타임라인" phase="Phase 4" />} />
         <Route path="disruptions" element={<ComingSoon title="교란 시뮬레이터" phase="Phase 6" />} />
         <Route path="compare" element={<ComingSoon title="알고리즘 비교" phase="Phase 5" />} />

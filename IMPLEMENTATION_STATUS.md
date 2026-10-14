@@ -50,3 +50,16 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | Baseline time-aware grouping (dock-only problem) | IMPLEMENTED | used by all dock algorithms; replaced by VRPTW in Phase 3/4 |
 | Validator D1–D5 + R1–R8 | TESTED | `test_dock_validator_catches_violations` |
 | Dock timeline UI (dock lanes, vehicle lanes, waiting/load/road bars, overlap/capacity/early-load warnings) | TESTED | `frontend/src/tests/phase2.test.tsx`; manual browser check (run #4, 0 warnings) |
+
+## Phase 3 — Vehicle routing (VRPTW)
+
+| Item | Status | Evidence |
+|---|---|---|
+| Routing units (same-customer aggregation, capacity split) + fast simulator identical to shared timing | TESTED | `test_same_customer_orders_share_one_stop`, `test_simulator_matches_shared_timing` |
+| Time-oriented nearest neighbour | TESTED | `tests/optimization/test_routing.py` (all cases) |
+| Cheapest insertion (cached per route) | TESTED | same |
+| OR-Tools Routing VRPTW (weight+volume capacity, time windows soft/hard, drop penalties, readiness per vehicle, GLS, warm start) | TESTED | `test_ortools_not_worse_than_insertion_warm_start`; normal_day: cost 362k vs insertion 413k vs NN 526k (seed 1, 8–10 s) |
+| Capacity / hard windows / zero vehicles / identical windows / single order / unreachable customer | TESTED | `test_capacity_is_respected`, `test_hard_windows_never_violated`, `test_zero_vehicles_all_unserved`, `test_identical_time_windows_and_single_order`, `test_far_customer_beyond_shift_is_unserved…` |
+| Honest provenance: synthetic coordinates, euclidean travel, schematic straight lines, no optimality claims | TESTED | API `test_routing_run_publishes_routes_and_stops` (gap = null); UI `phase3.test.tsx` |
+| Routes UI: schematic SVG (default), optional OSM map (lazy, tile-error fallback), route/stop table | TESTED | `phase3.test.tsx`; manual browser check (OSM tiles loaded, 34 overlays) |
+| Routing-only readiness assumption = order release (warehouse not modelled) | IMPLEMENTED | documented in pipeline docstring, metadata and validator R8 |

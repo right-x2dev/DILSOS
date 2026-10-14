@@ -341,7 +341,8 @@ def validate_schedule(snap: ScenarioSnapshot, result: ScheduleResult) -> Validat
             if "dock" in scope:
                 ready = max((pack_ready.get(o, 0) for o in r.order_ids), default=0)
             else:
-                ready = max((om[o].due_min for o in r.order_ids if o in om), default=0)
+                # routing-only scope: goods available at order release (warehouse not modelled)
+                ready = max((om[o].release_min for o in r.order_ids if o in om), default=0)
             is_frozen_route = any(fr.vehicle_id == r.vehicle_id for fr in snap.frozen_routes)
             if r.departure_min < ready and not is_frozen_route:
                 v.add(
