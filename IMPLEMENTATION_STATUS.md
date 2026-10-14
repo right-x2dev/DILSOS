@@ -89,5 +89,5 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | Full benchmark suite (medium/large, 10 seeds) | IMPLEMENTED | `--suite full` available; not executed in this session (time) |
 
 Selected measured results (quick suite, 5 s budget): CP-SAT best on every warehouse instance (gap 0 on small-s1);
-ALNS (≤150 iterations, 0.05–0.8 s) within 0–0.2 % of OR-Tools' 5 s solution on best-of-5; integrated iterative
+ALNS (≤150 iterations, 0.05–0.8 s) within 0–0.4 % of OR-Tools' 5 s solution on best-of-5 (equal on small-s1/s2); integrated iterative
 improves the bottleneck scenario by 10.4 % total cost vs sequential and equals it on the small instances.
