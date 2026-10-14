@@ -15,9 +15,10 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | Alembic migration 0001 | TESTED | `test_migrations_created_tables` (fresh DB per session) |
 | UTC datetime type | TESTED | `test_utc_type_rejects_naive_and_normalises` |
 | Frontend shell, login, health badge | TESTED | `frontend/src/tests/shell.test.tsx` (3 tests); manual browser login on Vite dev server |
-| Dockerfiles + compose (dev/prod) | IMPLEMENTED | Not run locally (no Docker on dev machine); verified by CI job `compose-smoke` once pushed |
-| CI workflow | IMPLEMENTED | `.github/workflows/ci.yml` — result pending first push |
-| Local MySQL | BLOCKED (owner action) | Run `scripts/mysql_init.sql` as root; until then local runtime uses SQLite. CI tests on MySQL 8.4 |
+| Dockerfiles + compose (dev) | TESTED (CI) | CI `compose-smoke` (run 38528738193): build, start, readiness, API smoke, Playwright E2E — green. Not run on the dev laptop (no Docker) |
+| Production compose overrides | IMPLEMENTED | `docker-compose.prod.yml` not exercised in CI |
+| CI workflow | TESTED | https://github.com/right-x2dev/DILSOS/actions/runs/38528738193 — backend (SQLite + MySQL 8.4), frontend, compose-smoke all green |
+| Local MySQL | BLOCKED (owner action) | Run `scripts/mysql_init.sql` as root; until then local runtime uses SQLite. MySQL 8.4 is tested in CI |
 
 ## Phase 1 — Warehouse vertical slice
 
@@ -126,14 +127,14 @@ improves the bottleneck scenario by 10.4 % total cost vs sequential and equals i
 
 | Criterion | Status | Notes |
 |---|---|---|
-| `docker compose up --build` starts all services with `.env.example` defaults | IMPLEMENTED — pending CI | No Docker on the dev machine; CI job `compose-smoke` builds, starts, waits for readiness, runs API smoke + Playwright |
+| `docker compose up --build` starts all services with `.env.example` defaults | TESTED (CI) | `compose-smoke` green on GitHub Actions (build, readiness, API smoke, Playwright E2E); not run on the dev laptop (no Docker) |
 | Migration & seed commands work; demo login succeeds | TESTED | SQLite locally (fresh DB in this session), MySQL 8.4 in CI integration job; local MySQL needs `scripts/mysql_init.sql` (owner) |
 | Create/load a scenario, run a real warehouse solver and a real VRPTW solver, inspect verified schedules/metrics, API-backed Gantt, dock and map views | TESTED | E2E smoke + API tests + screenshots |
 | Integrated baseline produces consistent pick→pack→load→depart→deliver timestamps | TESTED | `assert_chain_consistent`, `test_integrated_run_has_consistent_timestamps` |
 | Injected disruption yields versioned KEEP/PARTIAL/FULL outputs or explicit infeasibility, differences shown in UI | TESTED | Phase 6 tests, disruption simulator diff view |
 | ≥1 baseline and ≥1 advanced algorithm benchmarked on identical datasets with reproducible seeds | TESTED | `docs/experiments/benchmark_quick_*` |
 | No invalid schedule published as feasible | TESTED | `test_invalid_schedule_is_never_published`, property tests |
-| All mandatory tests pass; CI builds | TESTED locally / pending first CI run | see final report |
+| All mandatory tests pass; CI builds | TESTED | locally + CI run 38528738193 |
 | README includes setup and architecture | DONE | `README.md` |
 
 ## Not implemented (explicitly)
@@ -146,4 +147,10 @@ improves the bottleneck scenario by 10.4 % total cost vs sequential and equals i
 | Item | Status | Evidence |
 |---|---|---|
 | Local git history (one commit per phase) | DONE | `git log` |
-| New public GitHub repository + push | BLOCKED (owner action) | GitHub CLI install via winget is waiting for Windows admin (UAC) approval and `gh auth login` must be done by the owner; then run `powershell -ExecutionPolicy Bypass -File scripts\publish_github.ps1` |
+| New public GitHub repository + push | DONE | https://github.com/right-x2dev/DILSOS |
+
+## Post-publication fixes (found by the first MySQL CI run)
+| Item | Status | Evidence |
+|---|---|---|
+| MySQL `FLOAT` (4-byte) truncated coordinates (37.509758 → 37.5098) | FIXED | `Double` columns + migration `0003` (MySQL only; SQLite REAL is already 8-byte); `test_definition_round_trip_is_lossless` green on MySQL 8.4 |
+| Queue tests read stale rows under MySQL REPEATABLE READ | FIXED (test-only) | tests end the read transaction before re-reading; app code always re-reads in a new transaction |

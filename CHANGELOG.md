@@ -71,3 +71,12 @@ All notable changes per phase. Dates are UTC.
   OpenAPI export, case study, demo script; synthetic dataset exports and CSV example; demo population script.
 ### Removed
 - Unused placeholder screen and empty `app/simulation` package.
+
+## [1.0.1] — 2026-10-14 — post-publication
+### Fixed
+- MySQL stored coordinates/float columns as 4-byte FLOAT; now DOUBLE (migration 0003, MySQL only).
+- Queue integration tests re-read rows inside a stale MySQL REPEATABLE READ snapshot.
+- Publish script aborted on Windows PowerShell 5.1 because gh writes status to stderr.
+### Verified
+- First green CI on GitHub Actions: backend (SQLite + MySQL 8.4), frontend, Docker Compose smoke + Playwright E2E.
+
