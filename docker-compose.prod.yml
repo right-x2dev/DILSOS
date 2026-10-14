@@ -1,0 +1,23 @@
+# Production overrides:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# Requires a real .env (APP_ENV=production, strong JWT_SECRET / DB passwords, real CORS_ORIGINS).
+# MySQL / Redis / API are NOT published on host ports; only the nginx frontend is.
+services:
+  mysql:
+    ports: !reset []
+    restart: unless-stopped
+  redis:
+    restart: unless-stopped
+  api:
+    ports: !reset []
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+  worker:
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+  frontend:
+    restart: unless-stopped
+    ports: !override
+      - "80:80"

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Local DBs / env
+*.db
+*.sqlite3
+.env
+backend/.env
+frontend/.env
+!.env.example
+
+# Node
+node_modules/
+dist/
+coverage/
+frontend/test-results/
+frontend/playwright-report/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated experiment scratch (committed results live in docs/experiments)
+datasets/synthetic/_tmp/

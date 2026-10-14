@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  font-family: "Pretendard", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+  background: #f5f7fa;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
