@@ -1,0 +1,2176 @@
+{
+ "name": "vehicle_breakdown",
+ "description": "차량 고장 데모: 기준 계획 수립 후 교란 시뮬레이터에서 V02 고장 이벤트를 주입",
+ "seed": 303,
+ "operating_date": "2026-10-15",
+ "horizon_start_local": 360,
+ "horizon_min": 960,
+ "facility": {
+  "code": "DC-BREAKDOWN",
+  "name": "수도권 합성 물류센터 DC-BREAKDOWN (synthetic)",
+  "timezone": "Asia/Seoul",
+  "x_km": 0.0,
+  "y_km": 0.0,
+  "lat": 37.5,
+  "lon": 127.0
+ },
+ "customers": [
+  {
+   "code": "C001",
+   "name": "고객 001",
+   "x_km": 2.618,
+   "y_km": -0.52,
+   "lat": 37.495297,
+   "lon": 127.029644,
+   "service_min": 6,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C002",
+   "name": "고객 002",
+   "x_km": 14.128,
+   "y_km": -4.912,
+   "lat": 37.455577,
+   "lon": 127.159971,
+   "service_min": 11,
+   "tw_start_local": 780,
+   "tw_end_local": 1020
+  },
+  {
+   "code": "C003",
+   "name": "고객 003",
+   "x_km": -5.87,
+   "y_km": 1.011,
+   "lat": 37.509143,
+   "lon": 126.933534,
+   "service_min": 6,
+   "tw_start_local": 540,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C004",
+   "name": "고객 004",
+   "x_km": -7.31,
+   "y_km": -2.07,
+   "lat": 37.48128,
+   "lon": 126.917229,
+   "service_min": 5,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C005",
+   "name": "고객 005",
+   "x_km": 8.354,
+   "y_km": 7.99,
+   "lat": 37.572259,
+   "lon": 127.094592,
+   "service_min": 7,
+   "tw_start_local": 840,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C006",
+   "name": "고객 006",
+   "x_km": 9.356,
+   "y_km": -4.834,
+   "lat": 37.456283,
+   "lon": 127.105938,
+   "service_min": 11,
+   "tw_start_local": 540,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C007",
+   "name": "고객 007",
+   "x_km": 7.359,
+   "y_km": -2.981,
+   "lat": 37.473041,
+   "lon": 127.083326,
+   "service_min": 8,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C008",
+   "name": "고객 008",
+   "x_km": 4.811,
+   "y_km": 7.271,
+   "lat": 37.565757,
+   "lon": 127.054475,
+   "service_min": 9,
+   "tw_start_local": 540,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C009",
+   "name": "고객 009",
+   "x_km": -3.989,
+   "y_km": -12.771,
+   "lat": 37.384503,
+   "lon": 126.954833,
+   "service_min": 9,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C010",
+   "name": "고객 010",
+   "x_km": 0.047,
+   "y_km": 10.875,
+   "lat": 37.59835,
+   "lon": 127.000532,
+   "service_min": 5,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C011",
+   "name": "고객 011",
+   "x_km": 10.111,
+   "y_km": -9.827,
+   "lat": 37.411127,
+   "lon": 127.114486,
+   "service_min": 7,
+   "tw_start_local": 780,
+   "tw_end_local": 1020
+  },
+  {
+   "code": "C012",
+   "name": "고객 012",
+   "x_km": -1.915,
+   "y_km": -13.169,
+   "lat": 37.380903,
+   "lon": 126.978317,
+   "service_min": 12,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C013",
+   "name": "고객 013",
+   "x_km": 6.088,
+   "y_km": -0.934,
+   "lat": 37.491553,
+   "lon": 127.068934,
+   "service_min": 6,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C014",
+   "name": "고객 014",
+   "x_km": 13.744,
+   "y_km": -0.531,
+   "lat": 37.495198,
+   "lon": 127.155623,
+   "service_min": 7,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C015",
+   "name": "고객 015",
+   "x_km": 4.287,
+   "y_km": 9.524,
+   "lat": 37.586132,
+   "lon": 127.048542,
+   "service_min": 5,
+   "tw_start_local": 840,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C016",
+   "name": "고객 016",
+   "x_km": -7.586,
+   "y_km": -3.878,
+   "lat": 37.464928,
+   "lon": 126.914104,
+   "service_min": 7,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C017",
+   "name": "고객 017",
+   "x_km": -10.352,
+   "y_km": -10.464,
+   "lat": 37.405367,
+   "lon": 126.882785,
+   "service_min": 11,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C018",
+   "name": "고객 018",
+   "x_km": -0.31,
+   "y_km": 0.617,
+   "lat": 37.50558,
+   "lon": 126.99649,
+   "service_min": 9,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C019",
+   "name": "고객 019",
+   "x_km": -2.671,
+   "y_km": -6.002,
+   "lat": 37.44572,
+   "lon": 126.969756,
+   "service_min": 5,
+   "tw_start_local": 540,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C020",
+   "name": "고객 020",
+   "x_km": -1.687,
+   "y_km": -7.435,
+   "lat": 37.43276,
+   "lon": 126.980898,
+   "service_min": 9,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C021",
+   "name": "고객 021",
+   "x_km": -2.472,
+   "y_km": -6.115,
+   "lat": 37.444698,
+   "lon": 126.97201,
+   "service_min": 11,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C022",
+   "name": "고객 022",
+   "x_km": 2.891,
+   "y_km": -0.765,
+   "lat": 37.493082,
+   "lon": 127.032735,
+   "service_min": 7,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C023",
+   "name": "고객 023",
+   "x_km": 11.15,
+   "y_km": 4.728,
+   "lat": 37.542759,
+   "lon": 127.126251,
+   "service_min": 11,
+   "tw_start_local": 840,
+   "tw_end_local": 1080
+  },
+  {
+   "code": "C024",
+   "name": "고객 024",
+   "x_km": -5.782,
+   "y_km": -0.602,
+   "lat": 37.494556,
+   "lon": 126.934531,
+   "service_min": 10,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C025",
+   "name": "고객 025",
+   "x_km": 7.235,
+   "y_km": -7.779,
+   "lat": 37.429649,
+   "lon": 127.081922,
+   "service_min": 12,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C026",
+   "name": "고객 026",
+   "x_km": -14.016,
+   "y_km": 2.903,
+   "lat": 37.526254,
+   "lon": 126.841297,
+   "service_min": 9,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C027",
+   "name": "고객 027",
+   "x_km": -12.83,
+   "y_km": 5.751,
+   "lat": 37.55201,
+   "lon": 126.854726,
+   "service_min": 12,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C028",
+   "name": "고객 028",
+   "x_km": -0.178,
+   "y_km": -14.293,
+   "lat": 37.370738,
+   "lon": 126.997985,
+   "service_min": 12,
+   "tw_start_local": 780,
+   "tw_end_local": 1020
+  },
+  {
+   "code": "C029",
+   "name": "고객 029",
+   "x_km": 9.459,
+   "y_km": 5.612,
+   "lat": 37.550753,
+   "lon": 127.107104,
+   "service_min": 7,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C030",
+   "name": "고객 030",
+   "x_km": 5.061,
+   "y_km": -2.808,
+   "lat": 37.474605,
+   "lon": 127.057306,
+   "service_min": 9,
+   "tw_start_local": 780,
+   "tw_end_local": 1020
+  },
+  {
+   "code": "C031",
+   "name": "고객 031",
+   "x_km": -6.967,
+   "y_km": -9.812,
+   "lat": 37.411263,
+   "lon": 126.921113,
+   "service_min": 8,
+   "tw_start_local": 660,
+   "tw_end_local": 900
+  },
+  {
+   "code": "C032",
+   "name": "고객 032",
+   "x_km": -14.557,
+   "y_km": 3.329,
+   "lat": 37.530107,
+   "lon": 126.835172,
+   "service_min": 5,
+   "tw_start_local": 780,
+   "tw_end_local": 1020
+  },
+  {
+   "code": "C033",
+   "name": "고객 033",
+   "x_km": 4.146,
+   "y_km": -10.707,
+   "lat": 37.403169,
+   "lon": 127.046945,
+   "service_min": 10,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C034",
+   "name": "고객 034",
+   "x_km": -3.229,
+   "y_km": 14.582,
+   "lat": 37.631875,
+   "lon": 126.963438,
+   "service_min": 10,
+   "tw_start_local": 600,
+   "tw_end_local": 840
+  },
+  {
+   "code": "C035",
+   "name": "고객 035",
+   "x_km": -7.431,
+   "y_km": -1.553,
+   "lat": 37.485955,
+   "lon": 126.915859,
+   "service_min": 7,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C036",
+   "name": "고객 036",
+   "x_km": -1.336,
+   "y_km": -1.69,
+   "lat": 37.484716,
+   "lon": 126.984873,
+   "service_min": 9,
+   "tw_start_local": 540,
+   "tw_end_local": 720
+  },
+  {
+   "code": "C037",
+   "name": "고객 037",
+   "x_km": -9.765,
+   "y_km": -7.193,
+   "lat": 37.434949,
+   "lon": 126.889431,
+   "service_min": 11,
+   "tw_start_local": 840,
+   "tw_end_local": 1080
+  }
+ ],
+ "skus": [
+  {
+   "code": "SKU001",
+   "name": "상품 001",
+   "zone": "B",
+   "unit_weight_g": 3399,
+   "unit_volume_ml": 28689,
+   "pick_sec_per_unit": 37
+  },
+  {
+   "code": "SKU002",
+   "name": "상품 002",
+   "zone": "A",
+   "unit_weight_g": 2880,
+   "unit_volume_ml": 9216,
+   "pick_sec_per_unit": 37
+  },
+  {
+   "code": "SKU003",
+   "name": "상품 003",
+   "zone": "A",
+   "unit_weight_g": 6798,
+   "unit_volume_ml": 10904,
+   "pick_sec_per_unit": 13
+  },
+  {
+   "code": "SKU004",
+   "name": "상품 004",
+   "zone": "A",
+   "unit_weight_g": 7956,
+   "unit_volume_ml": 24026,
+   "pick_sec_per_unit": 30
+  },
+  {
+   "code": "SKU005",
+   "name": "상품 005",
+   "zone": "A",
+   "unit_weight_g": 6140,
+   "unit_volume_ml": 24333,
+   "pick_sec_per_unit": 15
+  },
+  {
+   "code": "SKU006",
+   "name": "상품 006",
+   "zone": "B",
+   "unit_weight_g": 7140,
+   "unit_volume_ml": 27848,
+   "pick_sec_per_unit": 37
+  },
+  {
+   "code": "SKU007",
+   "name": "상품 007",
+   "zone": "A",
+   "unit_weight_g": 3230,
+   "unit_volume_ml": 26028,
+   "pick_sec_per_unit": 28
+  },
+  {
+   "code": "SKU008",
+   "name": "상품 008",
+   "zone": "C",
+   "unit_weight_g": 1360,
+   "unit_volume_ml": 1159,
+   "pick_sec_per_unit": 11
+  },
+  {
+   "code": "SKU009",
+   "name": "상품 009",
+   "zone": "C",
+   "unit_weight_g": 8167,
+   "unit_volume_ml": 26186,
+   "pick_sec_per_unit": 20
+  },
+  {
+   "code": "SKU010",
+   "name": "상품 010",
+   "zone": "B",
+   "unit_weight_g": 9305,
+   "unit_volume_ml": 24477,
+   "pick_sec_per_unit": 27
+  },
+  {
+   "code": "SKU011",
+   "name": "상품 011",
+   "zone": "A",
+   "unit_weight_g": 1434,
+   "unit_volume_ml": 15693,
+   "pick_sec_per_unit": 19
+  },
+  {
+   "code": "SKU012",
+   "name": "상품 012",
+   "zone": "B",
+   "unit_weight_g": 2426,
+   "unit_volume_ml": 13538,
+   "pick_sec_per_unit": 33
+  },
+  {
+   "code": "SKU013",
+   "name": "상품 013",
+   "zone": "B",
+   "unit_weight_g": 7648,
+   "unit_volume_ml": 17139,
+   "pick_sec_per_unit": 38
+  },
+  {
+   "code": "SKU014",
+   "name": "상품 014",
+   "zone": "A",
+   "unit_weight_g": 11075,
+   "unit_volume_ml": 5177,
+   "pick_sec_per_unit": 32
+  },
+  {
+   "code": "SKU015",
+   "name": "상품 015",
+   "zone": "B",
+   "unit_weight_g": 8746,
+   "unit_volume_ml": 8291,
+   "pick_sec_per_unit": 10
+  },
+  {
+   "code": "SKU016",
+   "name": "상품 016",
+   "zone": "B",
+   "unit_weight_g": 1857,
+   "unit_volume_ml": 16674,
+   "pick_sec_per_unit": 15
+  },
+  {
+   "code": "SKU017",
+   "name": "상품 017",
+   "zone": "A",
+   "unit_weight_g": 2025,
+   "unit_volume_ml": 15371,
+   "pick_sec_per_unit": 21
+  },
+  {
+   "code": "SKU018",
+   "name": "상품 018",
+   "zone": "A",
+   "unit_weight_g": 7068,
+   "unit_volume_ml": 11579,
+   "pick_sec_per_unit": 10
+  },
+  {
+   "code": "SKU019",
+   "name": "상품 019",
+   "zone": "C",
+   "unit_weight_g": 2177,
+   "unit_volume_ml": 9327,
+   "pick_sec_per_unit": 24
+  },
+  {
+   "code": "SKU020",
+   "name": "상품 020",
+   "zone": "A",
+   "unit_weight_g": 6838,
+   "unit_volume_ml": 25384,
+   "pick_sec_per_unit": 22
+  },
+  {
+   "code": "SKU021",
+   "name": "상품 021",
+   "zone": "B",
+   "unit_weight_g": 5353,
+   "unit_volume_ml": 1482,
+   "pick_sec_per_unit": 26
+  },
+  {
+   "code": "SKU022",
+   "name": "상품 022",
+   "zone": "B",
+   "unit_weight_g": 4295,
+   "unit_volume_ml": 15339,
+   "pick_sec_per_unit": 30
+  },
+  {
+   "code": "SKU023",
+   "name": "상품 023",
+   "zone": "A",
+   "unit_weight_g": 10758,
+   "unit_volume_ml": 2926,
+   "pick_sec_per_unit": 29
+  },
+  {
+   "code": "SKU024",
+   "name": "상품 024",
+   "zone": "B",
+   "unit_weight_g": 1325,
+   "unit_volume_ml": 29659,
+   "pick_sec_per_unit": 36
+  },
+  {
+   "code": "SKU025",
+   "name": "상품 025",
+   "zone": "A",
+   "unit_weight_g": 2524,
+   "unit_volume_ml": 4215,
+   "pick_sec_per_unit": 35
+  },
+  {
+   "code": "SKU026",
+   "name": "상품 026",
+   "zone": "A",
+   "unit_weight_g": 11215,
+   "unit_volume_ml": 20953,
+   "pick_sec_per_unit": 30
+  },
+  {
+   "code": "SKU027",
+   "name": "상품 027",
+   "zone": "A",
+   "unit_weight_g": 1796,
+   "unit_volume_ml": 3112,
+   "pick_sec_per_unit": 39
+  },
+  {
+   "code": "SKU028",
+   "name": "상품 028",
+   "zone": "A",
+   "unit_weight_g": 10432,
+   "unit_volume_ml": 20507,
+   "pick_sec_per_unit": 28
+  },
+  {
+   "code": "SKU029",
+   "name": "상품 029",
+   "zone": "A",
+   "unit_weight_g": 7119,
+   "unit_volume_ml": 19964,
+   "pick_sec_per_unit": 23
+  },
+  {
+   "code": "SKU030",
+   "name": "상품 030",
+   "zone": "B",
+   "unit_weight_g": 3245,
+   "unit_volume_ml": 7286,
+   "pick_sec_per_unit": 35
+  },
+  {
+   "code": "SKU031",
+   "name": "상품 031",
+   "zone": "A",
+   "unit_weight_g": 6469,
+   "unit_volume_ml": 25508,
+   "pick_sec_per_unit": 38
+  },
+  {
+   "code": "SKU032",
+   "name": "상품 032",
+   "zone": "B",
+   "unit_weight_g": 2464,
+   "unit_volume_ml": 15014,
+   "pick_sec_per_unit": 22
+  },
+  {
+   "code": "SKU033",
+   "name": "상품 033",
+   "zone": "A",
+   "unit_weight_g": 6070,
+   "unit_volume_ml": 6689,
+   "pick_sec_per_unit": 34
+  },
+  {
+   "code": "SKU034",
+   "name": "상품 034",
+   "zone": "A",
+   "unit_weight_g": 4971,
+   "unit_volume_ml": 12022,
+   "pick_sec_per_unit": 24
+  },
+  {
+   "code": "SKU035",
+   "name": "상품 035",
+   "zone": "A",
+   "unit_weight_g": 3742,
+   "unit_volume_ml": 17337,
+   "pick_sec_per_unit": 30
+  },
+  {
+   "code": "SKU036",
+   "name": "상품 036",
+   "zone": "A",
+   "unit_weight_g": 5962,
+   "unit_volume_ml": 27421,
+   "pick_sec_per_unit": 37
+  },
+  {
+   "code": "SKU037",
+   "name": "상품 037",
+   "zone": "A",
+   "unit_weight_g": 4939,
+   "unit_volume_ml": 1694,
+   "pick_sec_per_unit": 21
+  },
+  {
+   "code": "SKU038",
+   "name": "상품 038",
+   "zone": "C",
+   "unit_weight_g": 10222,
+   "unit_volume_ml": 17982,
+   "pick_sec_per_unit": 22
+  },
+  {
+   "code": "SKU039",
+   "name": "상품 039",
+   "zone": "B",
+   "unit_weight_g": 9906,
+   "unit_volume_ml": 21965,
+   "pick_sec_per_unit": 23
+  },
+  {
+   "code": "SKU040",
+   "name": "상품 040",
+   "zone": "A",
+   "unit_weight_g": 2366,
+   "unit_volume_ml": 29051,
+   "pick_sec_per_unit": 26
+  },
+  {
+   "code": "SKU041",
+   "name": "상품 041",
+   "zone": "B",
+   "unit_weight_g": 10907,
+   "unit_volume_ml": 7283,
+   "pick_sec_per_unit": 11
+  },
+  {
+   "code": "SKU042",
+   "name": "상품 042",
+   "zone": "A",
+   "unit_weight_g": 1938,
+   "unit_volume_ml": 25517,
+   "pick_sec_per_unit": 32
+  },
+  {
+   "code": "SKU043",
+   "name": "상품 043",
+   "zone": "C",
+   "unit_weight_g": 2459,
+   "unit_volume_ml": 22548,
+   "pick_sec_per_unit": 19
+  },
+  {
+   "code": "SKU044",
+   "name": "상품 044",
+   "zone": "B",
+   "unit_weight_g": 1677,
+   "unit_volume_ml": 24432,
+   "pick_sec_per_unit": 12
+  },
+  {
+   "code": "SKU045",
+   "name": "상품 045",
+   "zone": "A",
+   "unit_weight_g": 11408,
+   "unit_volume_ml": 17253,
+   "pick_sec_per_unit": 39
+  },
+  {
+   "code": "SKU046",
+   "name": "상품 046",
+   "zone": "A",
+   "unit_weight_g": 5956,
+   "unit_volume_ml": 7190,
+   "pick_sec_per_unit": 34
+  },
+  {
+   "code": "SKU047",
+   "name": "상품 047",
+   "zone": "A",
+   "unit_weight_g": 1880,
+   "unit_volume_ml": 6070,
+   "pick_sec_per_unit": 29
+  },
+  {
+   "code": "SKU048",
+   "name": "상품 048",
+   "zone": "A",
+   "unit_weight_g": 9940,
+   "unit_volume_ml": 2932,
+   "pick_sec_per_unit": 19
+  },
+  {
+   "code": "SKU049",
+   "name": "상품 049",
+   "zone": "B",
+   "unit_weight_g": 3043,
+   "unit_volume_ml": 19348,
+   "pick_sec_per_unit": 39
+  },
+  {
+   "code": "SKU050",
+   "name": "상품 050",
+   "zone": "A",
+   "unit_weight_g": 4679,
+   "unit_volume_ml": 22127,
+   "pick_sec_per_unit": 16
+  },
+  {
+   "code": "SKU051",
+   "name": "상품 051",
+   "zone": "A",
+   "unit_weight_g": 5371,
+   "unit_volume_ml": 28609,
+   "pick_sec_per_unit": 22
+  },
+  {
+   "code": "SKU052",
+   "name": "상품 052",
+   "zone": "A",
+   "unit_weight_g": 10778,
+   "unit_volume_ml": 8994,
+   "pick_sec_per_unit": 19
+  },
+  {
+   "code": "SKU053",
+   "name": "상품 053",
+   "zone": "C",
+   "unit_weight_g": 4706,
+   "unit_volume_ml": 6457,
+   "pick_sec_per_unit": 35
+  },
+  {
+   "code": "SKU054",
+   "name": "상품 054",
+   "zone": "A",
+   "unit_weight_g": 229,
+   "unit_volume_ml": 28426,
+   "pick_sec_per_unit": 26
+  },
+  {
+   "code": "SKU055",
+   "name": "상품 055",
+   "zone": "A",
+   "unit_weight_g": 809,
+   "unit_volume_ml": 11285,
+   "pick_sec_per_unit": 23
+  },
+  {
+   "code": "SKU056",
+   "name": "상품 056",
+   "zone": "A",
+   "unit_weight_g": 382,
+   "unit_volume_ml": 19465,
+   "pick_sec_per_unit": 12
+  },
+  {
+   "code": "SKU057",
+   "name": "상품 057",
+   "zone": "B",
+   "unit_weight_g": 391,
+   "unit_volume_ml": 29393,
+   "pick_sec_per_unit": 31
+  },
+  {
+   "code": "SKU058",
+   "name": "상품 058",
+   "zone": "B",
+   "unit_weight_g": 4306,
+   "unit_volume_ml": 9203,
+   "pick_sec_per_unit": 12
+  },
+  {
+   "code": "SKU059",
+   "name": "상품 059",
+   "zone": "A",
+   "unit_weight_g": 3558,
+   "unit_volume_ml": 14582,
+   "pick_sec_per_unit": 27
+  },
+  {
+   "code": "SKU060",
+   "name": "상품 060",
+   "zone": "A",
+   "unit_weight_g": 3255,
+   "unit_volume_ml": 13171,
+   "pick_sec_per_unit": 26
+  }
+ ],
+ "inventory": {
+  "SKU001": 5,
+  "SKU002": 1,
+  "SKU003": 0,
+  "SKU004": 14,
+  "SKU005": 10,
+  "SKU006": 12,
+  "SKU007": 30,
+  "SKU008": 10,
+  "SKU009": 2,
+  "SKU010": 5,
+  "SKU011": 23,
+  "SKU012": 37,
+  "SKU013": 2,
+  "SKU014": 2,
+  "SKU015": 7,
+  "SKU016": 9,
+  "SKU017": 17,
+  "SKU018": 17,
+  "SKU019": 26,
+  "SKU020": 12,
+  "SKU021": 30,
+  "SKU022": 6,
+  "SKU023": 22,
+  "SKU024": 4,
+  "SKU025": 29,
+  "SKU026": 5,
+  "SKU027": 11,
+  "SKU028": 20,
+  "SKU029": 6,
+  "SKU030": 10,
+  "SKU031": 29,
+  "SKU032": 13,
+  "SKU033": 1,
+  "SKU034": 30,
+  "SKU035": 13,
+  "SKU036": 7,
+  "SKU037": 13,
+  "SKU038": 9,
+  "SKU039": 34,
+  "SKU040": 3,
+  "SKU041": 13,
+  "SKU042": 25,
+  "SKU043": 5,
+  "SKU044": 28,
+  "SKU045": 19,
+  "SKU046": 4,
+  "SKU047": 41,
+  "SKU048": 9,
+  "SKU049": 25,
+  "SKU050": 19,
+  "SKU051": 16,
+  "SKU052": 32,
+  "SKU053": 13,
+  "SKU054": 25,
+  "SKU055": 27,
+  "SKU056": 9,
+  "SKU057": 0,
+  "SKU058": 14,
+  "SKU059": 2,
+  "SKU060": 31
+ },
+ "orders": [
+  {
+   "code": "O0001",
+   "customer_code": "C001",
+   "release_local": 647,
+   "due_local": 737,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU017",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU016",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0002",
+   "customer_code": "C002",
+   "release_local": 575,
+   "due_local": 868,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU048",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU022",
+     "qty": 1
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0003",
+   "customer_code": "C003",
+   "release_local": 600,
+   "due_local": 998,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU020",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0004",
+   "customer_code": "C004",
+   "release_local": 491,
+   "due_local": 799,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU023",
+     "qty": 4
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0005",
+   "customer_code": "C005",
+   "release_local": 647,
+   "due_local": 929,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU036",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0006",
+   "customer_code": "C006",
+   "release_local": 435,
+   "due_local": 934,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU027",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU037",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU044",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0007",
+   "customer_code": "C007",
+   "release_local": 467,
+   "due_local": 750,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU055",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU034",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU031",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0008",
+   "customer_code": "C008",
+   "release_local": 444,
+   "due_local": 1001,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU022",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU054",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU052",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0009",
+   "customer_code": "C009",
+   "release_local": 497,
+   "due_local": 806,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU055",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU058",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU052",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU005",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0010",
+   "customer_code": "C010",
+   "release_local": 436,
+   "due_local": 824,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU042",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0011",
+   "customer_code": "C011",
+   "release_local": 660,
+   "due_local": 902,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU060",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU019",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0012",
+   "customer_code": "C012",
+   "release_local": 592,
+   "due_local": 682,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU039",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0013",
+   "customer_code": "C013",
+   "release_local": 447,
+   "due_local": 766,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU047",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU007",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU006",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU012",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0014",
+   "customer_code": "C014",
+   "release_local": 620,
+   "due_local": 778,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU020",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU023",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU050",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU045",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0015",
+   "customer_code": "C015",
+   "release_local": 628,
+   "due_local": 969,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU008",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU053",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU047",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU054",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0016",
+   "customer_code": "C016",
+   "release_local": 488,
+   "due_local": 753,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU030",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU051",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU054",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0017",
+   "customer_code": "C017",
+   "release_local": 485,
+   "due_local": 794,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU054",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU035",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU060",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU024",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0018",
+   "customer_code": "C018",
+   "release_local": 380,
+   "due_local": 746,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU018",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU047",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0019",
+   "customer_code": "C019",
+   "release_local": 474,
+   "due_local": 945,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU023",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU047",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU031",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU045",
+     "qty": 1
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0020",
+   "customer_code": "C020",
+   "release_local": 498,
+   "due_local": 607,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU028",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU053",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0021",
+   "customer_code": "C021",
+   "release_local": 648,
+   "due_local": 754,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU052",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU030",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0022",
+   "customer_code": "C022",
+   "release_local": 485,
+   "due_local": 744,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU044",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU011",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU049",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU021",
+     "qty": 5
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0023",
+   "customer_code": "C023",
+   "release_local": 436,
+   "due_local": 983,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU031",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU011",
+     "qty": 4
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0024",
+   "customer_code": "C024",
+   "release_local": 622,
+   "due_local": 823,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU045",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU052",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU011",
+     "qty": 4
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0025",
+   "customer_code": "C025",
+   "release_local": 649,
+   "due_local": 739,
+   "priority": 2,
+   "lines": [
+    {
+     "sku_code": "SKU019",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU015",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0026",
+   "customer_code": "C026",
+   "release_local": 369,
+   "due_local": 627,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU045",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU056",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0027",
+   "customer_code": "C027",
+   "release_local": 654,
+   "due_local": 744,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU041",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU032",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU021",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0028",
+   "customer_code": "C028",
+   "release_local": 551,
+   "due_local": 923,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU051",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0029",
+   "customer_code": "C029",
+   "release_local": 398,
+   "due_local": 778,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU058",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU039",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU019",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU007",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0030",
+   "customer_code": "C030",
+   "release_local": 411,
+   "due_local": 927,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU025",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU015",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU042",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0031",
+   "customer_code": "C031",
+   "release_local": 516,
+   "due_local": 791,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU028",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0032",
+   "customer_code": "C032",
+   "release_local": 480,
+   "due_local": 928,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU025",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU007",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0033",
+   "customer_code": "C033",
+   "release_local": 578,
+   "due_local": 762,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU046",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU012",
+     "qty": 5
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0034",
+   "customer_code": "C034",
+   "release_local": 468,
+   "due_local": 735,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU049",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU042",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU046",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU039",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0035",
+   "customer_code": "C035",
+   "release_local": 648,
+   "due_local": 738,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU007",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU021",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU012",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU039",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0036",
+   "customer_code": "C036",
+   "release_local": 454,
+   "due_local": 617,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU031",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0037",
+   "customer_code": "C037",
+   "release_local": 571,
+   "due_local": 957,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU035",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0038",
+   "customer_code": "C003",
+   "release_local": 638,
+   "due_local": 997,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU038",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU034",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU055",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0039",
+   "customer_code": "C033",
+   "release_local": 406,
+   "due_local": 714,
+   "priority": 3,
+   "lines": [
+    {
+     "sku_code": "SKU044",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU050",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU039",
+     "qty": 4
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0040",
+   "customer_code": "C032",
+   "release_local": 614,
+   "due_local": 891,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU035",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU031",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU047",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU049",
+     "qty": 3
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0041",
+   "customer_code": "C026",
+   "release_local": 643,
+   "due_local": 733,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU060",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU005",
+     "qty": 5
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0042",
+   "customer_code": "C031",
+   "release_local": 365,
+   "due_local": 792,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU004",
+     "qty": 5
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0043",
+   "customer_code": "C004",
+   "release_local": 410,
+   "due_local": 830,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU032",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU049",
+     "qty": 5
+    },
+    {
+     "sku_code": "SKU055",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU050",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0044",
+   "customer_code": "C011",
+   "release_local": 613,
+   "due_local": 912,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU060",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU041",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU053",
+     "qty": 1
+    },
+    {
+     "sku_code": "SKU028",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0045",
+   "customer_code": "C029",
+   "release_local": 559,
+   "due_local": 751,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU012",
+     "qty": 6
+    },
+    {
+     "sku_code": "SKU025",
+     "qty": 4
+    },
+    {
+     "sku_code": "SKU004",
+     "qty": 5
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0046",
+   "customer_code": "C017",
+   "release_local": 472,
+   "due_local": 758,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU055",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0047",
+   "customer_code": "C016",
+   "release_local": 558,
+   "due_local": 701,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU054",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0048",
+   "customer_code": "C013",
+   "release_local": 548,
+   "due_local": 767,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU017",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU052",
+     "qty": 3
+    },
+    {
+     "sku_code": "SKU006",
+     "qty": 6
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0049",
+   "customer_code": "C022",
+   "release_local": 448,
+   "due_local": 764,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU034",
+     "qty": 4
+    }
+   ],
+   "status": "OPEN"
+  },
+  {
+   "code": "O0050",
+   "customer_code": "C015",
+   "release_local": 542,
+   "due_local": 962,
+   "priority": 1,
+   "lines": [
+    {
+     "sku_code": "SKU029",
+     "qty": 2
+    },
+    {
+     "sku_code": "SKU044",
+     "qty": 2
+    }
+   ],
+   "status": "OPEN"
+  }
+ ],
+ "workers": [
+  {
+   "code": "W01",
+   "name": "작업자 01",
+   "skills": [
+    "pick",
+    "pack",
+    "cold"
+   ],
+   "hourly_cost": 16500.0,
+   "shift_start_local": 360,
+   "shift_end_local": 900,
+   "regular_end_local": 840
+  },
+  {
+   "code": "W02",
+   "name": "작업자 02",
+   "skills": [
+    "pick"
+   ],
+   "hourly_cost": 14000.0,
+   "shift_start_local": 420,
+   "shift_end_local": 960,
+   "regular_end_local": 900
+  },
+  {
+   "code": "W03",
+   "name": "작업자 03",
+   "skills": [
+    "pick",
+    "pack"
+   ],
+   "hourly_cost": 14000.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1020,
+   "regular_end_local": 960
+  },
+  {
+   "code": "W04",
+   "name": "작업자 04",
+   "skills": [
+    "pick",
+    "cold"
+   ],
+   "hourly_cost": 14000.0,
+   "shift_start_local": 600,
+   "shift_end_local": 1140,
+   "regular_end_local": 1080
+  },
+  {
+   "code": "W05",
+   "name": "작업자 05",
+   "skills": [
+    "pick",
+    "pack"
+   ],
+   "hourly_cost": 15000.0,
+   "shift_start_local": 360,
+   "shift_end_local": 900,
+   "regular_end_local": 840
+  },
+  {
+   "code": "W06",
+   "name": "작업자 06",
+   "skills": [
+    "pick"
+   ],
+   "hourly_cost": 14000.0,
+   "shift_start_local": 420,
+   "shift_end_local": 960,
+   "regular_end_local": 900
+  }
+ ],
+ "equipment": [
+  {
+   "code": "FL1",
+   "kind": "forklift",
+   "name": "지게차 1"
+  }
+ ],
+ "pack_stations": [
+  {
+   "code": "PS1",
+   "name": "포장대 1",
+   "open_start_local": 360,
+   "open_end_local": 1200
+  },
+  {
+   "code": "PS2",
+   "name": "포장대 2",
+   "open_start_local": 360,
+   "open_end_local": 1200
+  },
+  {
+   "code": "PS3",
+   "name": "포장대 3",
+   "open_start_local": 360,
+   "open_end_local": 1200
+  }
+ ],
+ "docks": [
+  {
+   "code": "D1",
+   "name": "도크 1",
+   "vehicle_classes": [
+    "van",
+    "truck"
+   ],
+   "open_start_local": 420,
+   "open_end_local": 1290
+  },
+  {
+   "code": "D2",
+   "name": "도크 2",
+   "vehicle_classes": [
+    "van"
+   ],
+   "open_start_local": 420,
+   "open_end_local": 1290
+  }
+ ],
+ "vehicles": [
+  {
+   "code": "V01",
+   "vehicle_class": "van",
+   "capacity_kg": 700,
+   "capacity_l": 4000,
+   "fixed_cost": 70000.0,
+   "cost_per_km": 850.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1320,
+   "status": "AVAILABLE"
+  },
+  {
+   "code": "V02",
+   "vehicle_class": "van",
+   "capacity_kg": 700,
+   "capacity_l": 4000,
+   "fixed_cost": 70000.0,
+   "cost_per_km": 850.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1320,
+   "status": "AVAILABLE"
+  },
+  {
+   "code": "V03",
+   "vehicle_class": "van",
+   "capacity_kg": 700,
+   "capacity_l": 4000,
+   "fixed_cost": 70000.0,
+   "cost_per_km": 850.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1320,
+   "status": "AVAILABLE"
+  },
+  {
+   "code": "V04",
+   "vehicle_class": "van",
+   "capacity_kg": 700,
+   "capacity_l": 4000,
+   "fixed_cost": 70000.0,
+   "cost_per_km": 850.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1320,
+   "status": "AVAILABLE"
+  },
+  {
+   "code": "T01",
+   "vehicle_class": "truck",
+   "capacity_kg": 2000,
+   "capacity_l": 12000,
+   "fixed_cost": 120000.0,
+   "cost_per_km": 1300.0,
+   "shift_start_local": 480,
+   "shift_end_local": 1320,
+   "status": "AVAILABLE"
+  }
+ ],
+ "downtimes": [],
+ "params": {
+  "time_window_mode": "soft",
+  "return_to_depot": true,
+  "load_base_min": 10,
+  "load_per_order_min": 2,
+  "aggregate_same_customer": true
+ },
+ "weights": {
+  "currency": "KRW",
+  "late_penalty_per_min": 1000.0,
+  "unserved_penalty": 300000.0,
+  "overtime_premium": 0.5,
+  "change_penalty_per_task": 5000.0,
+  "change_penalty_per_route": 20000.0
+ },
+ "task_model": {
+  "pick_base_min": 3,
+  "pack_base_min": 4,
+  "pack_sec_per_unit": 10,
+  "forklift_weight_kg": 120,
+  "zone_skill": {
+   "C": "cold"
+  }
+ },
+ "travel": {
+  "provenance": "synthetic_euclidean",
+  "circuity": 1.3,
+  "speed_kmh": 30.0
+ }
+}

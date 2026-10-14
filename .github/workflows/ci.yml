@@ -78,6 +78,17 @@ jobs:
           docker compose ps
       - name: API smoke (login + demo scenario run)
         run: python3 scripts/smoke_test.py --base http://localhost:8080/api/v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: E2E smoke (Playwright, real stack)
+        working-directory: frontend
+        env:
+          E2E_BASE_URL: http://localhost:8080
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          npx playwright test
       - name: Logs on failure
         if: failure()
         run: docker compose logs --tail=200

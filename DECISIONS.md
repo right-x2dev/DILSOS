@@ -41,3 +41,22 @@ OR-Tools ≥ 9.10 snake_case API. Default 8 search workers (better incumbents) �
 
 ## ADR-012 — Dispatch rules use one shared serial SGS
 FIFO/EDD/SPT only change task priority; placement is a gap-filling serial schedule-generation scheme over multi-resource requirements (picker [+ zone skill] [+ forklift], packer + station). The same decoder is reused by SA/Tabu/GA so their encodings are feasible by construction.
+
+## ADR-013 — Routing-only readiness = order release
+Without a warehouse plan the routing-only problem assumes goods are available at order release (warehouse treated as
+instantaneous). The first draft used the ship cutoff, which forced mixed-window routes to wait for the latest cutoff and
+produced artificial lateness. Realistic readiness is modelled in the `integrated` problem.
+
+## ADR-014 — Rescheduling semantics
+Executed = started before the event (tasks) / loading started (routes); frozen and copied verbatim, never re-timed.
+KEEP freezes all unaffected work; PARTIAL opens the disrupted resources' tasks and all unstarted routes (vehicles/docks are
+shared); FULL freezes only executed work + a committed window. PARTIAL/FULL always evaluate the KEEP plan as a candidate.
+All three are registered algorithms that read their freeze sets from the stored snapshot → queued runs are reproducible.
+
+## ADR-015 — Policy recommendation is rule-based and normalised
+Weighted sum of min-max-normalised cost (incl. unserved/change penalties), lateness, changes and runtime among feasible
+policies, with a human-readable reason. It is explicitly labelled "rule-based selector, not ML".
+
+## ADR-016 — In-process rate limiting
+A per-process sliding window protects expensive submissions without adding infrastructure. It is not a queue and keeps no
+business state; multi-replica deployments should swap in a Redis-backed limiter.

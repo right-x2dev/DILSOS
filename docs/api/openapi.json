@@ -1,0 +1,6238 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "DILSOS API",
+  "description": "Dynamic Integrated Logistics Scheduling & Optimization System",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/api/v1/scenarios/{scenario_id}/events": {
+   "post": {
+    "tags": [
+     "disruptions"
+    ],
+    "summary": "Create Event",
+    "operationId": "create_event_api_v1_scenarios__scenario_id__events_post",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "Idempotency-Key",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Idempotency-Key"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EventIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/EventOut"
+        }
+       }
+      }
+     },
+     "200": {
+      "description": "idempotent replay",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/EventOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "tags": [
+     "disruptions"
+    ],
+    "summary": "List Events",
+    "operationId": "list_events_api_v1_scenarios__scenario_id__events_get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/EventOut"
+         },
+         "title": "Response List Events Api V1 Scenarios  Scenario Id  Events Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/reschedule": {
+   "post": {
+    "tags": [
+     "disruptions"
+    ],
+    "summary": "Reschedule",
+    "operationId": "reschedule_api_v1_runs__run_id__reschedule_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RescheduleIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RescheduleStarted"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/reschedules": {
+   "get": {
+    "tags": [
+     "disruptions"
+    ],
+    "summary": "Reschedules",
+    "operationId": "reschedules_api_v1_runs__run_id__reschedules_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "w_cost",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "default": 1.0,
+       "title": "W Cost"
+      }
+     },
+     {
+      "name": "w_lateness",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "default": 0.5,
+       "title": "W Lateness"
+      }
+     },
+     {
+      "name": "w_changes",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "default": 0.5,
+       "title": "W Changes"
+      }
+     },
+     {
+      "name": "w_runtime",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "default": 0.05,
+       "title": "W Runtime"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RescheduleSummary"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/imports/orders": {
+   "post": {
+    "tags": [
+     "import-export"
+    ],
+    "summary": "Import Orders",
+    "description": "CSV columns: order_code, customer_code, release_local (HH:MM), due_local (HH:MM), priority (1-3),\nsku_code, qty. One row per order line (rows sharing order_code form one order). Local times are\nwall-clock times of the scenario's operating day in the facility timezone (>24h = next day).",
+    "operationId": "import_orders_api_v1_imports_orders_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_import_orders_api_v1_imports_orders_post"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ImportResult"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "validation errors; nothing imported"
+     }
+    }
+   }
+  },
+  "/api/v1/exports/runs/{run_id}": {
+   "get": {
+    "tags": [
+     "import-export"
+    ],
+    "summary": "Export Run",
+    "operationId": "export_run_api_v1_exports_runs__run_id__get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "csv",
+        "json"
+       ],
+       "type": "string",
+       "default": "csv",
+       "title": "Format"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       },
+       "text/csv": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/ops/metrics": {
+   "get": {
+    "tags": [
+     "ops"
+    ],
+    "summary": "Metrics",
+    "operationId": "metrics_api_v1_ops_metrics_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/plain": {
+        "schema": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit-logs": {
+   "get": {
+    "tags": [
+     "audit"
+    ],
+    "summary": "List Audit",
+    "operationId": "list_audit_api_v1_audit_logs_get",
+    "parameters": [
+     {
+      "name": "entity_type",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Entity Type"
+      }
+     },
+     {
+      "name": "entity_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Entity Id"
+      }
+     },
+     {
+      "name": "action",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Action"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 500,
+       "minimum": 1,
+       "default": 50,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0,
+       "title": "Offset"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Page_AuditOut_"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/health/live": {
+   "get": {
+    "tags": [
+     "health"
+    ],
+    "summary": "Live",
+    "operationId": "live_api_v1_health_live_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LiveResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/health/ready": {
+   "get": {
+    "tags": [
+     "health"
+    ],
+    "summary": "Ready",
+    "operationId": "ready_api_v1_health_ready_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReadyResponse"
+        }
+       }
+      }
+     },
+     "503": {
+      "description": "Service Unavailable",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReadyResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/login": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Login",
+    "operationId": "login_api_v1_auth_login_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LoginRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LoginResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/me": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Me",
+    "operationId": "me_api_v1_auth_me_get",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/facilities": {
+   "get": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "List Facilities",
+    "operationId": "list_facilities_api_v1_facilities_get",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/FacilityOut"
+         },
+         "title": "Response List Facilities Api V1 Facilities Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/orders": {
+   "get": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "List Orders",
+    "operationId": "list_orders_api_v1_orders_get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "facility_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Facility Id"
+      }
+     },
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "pattern": "^(OPEN|CANCELLED|SHIPPED)$"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     },
+     {
+      "name": "priority",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer",
+         "maximum": 3,
+         "minimum": 1
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Priority"
+      }
+     },
+     {
+      "name": "q",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "maxLength": 40
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 500,
+       "minimum": 1,
+       "default": 50,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0,
+       "title": "Offset"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Page_OrderOut_"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "Create Order",
+    "operationId": "create_order_api_v1_orders_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OrderCreate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/OrderOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/resources/workers": {
+   "get": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "List Workers",
+    "operationId": "list_workers_api_v1_resources_workers_get",
+    "parameters": [
+     {
+      "name": "facility_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Facility Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/WorkerOut"
+         },
+         "title": "Response List Workers Api V1 Resources Workers Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "Create Worker",
+    "operationId": "create_worker_api_v1_resources_workers_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/WorkerIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/WorkerOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/resources/vehicles": {
+   "get": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "List Vehicles",
+    "operationId": "list_vehicles_api_v1_resources_vehicles_get",
+    "parameters": [
+     {
+      "name": "facility_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Facility Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/VehicleOut"
+         },
+         "title": "Response List Vehicles Api V1 Resources Vehicles Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "Create Vehicle",
+    "operationId": "create_vehicle_api_v1_resources_vehicles_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/VehicleIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VehicleOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/resources/docks": {
+   "get": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "List Docks",
+    "operationId": "list_docks_api_v1_resources_docks_get",
+    "parameters": [
+     {
+      "name": "facility_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Facility Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/DockOut"
+         },
+         "title": "Response List Docks Api V1 Resources Docks Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "master-data"
+    ],
+    "summary": "Create Dock",
+    "operationId": "create_dock_api_v1_resources_docks_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DockIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DockOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios": {
+   "get": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "List Scenarios",
+    "operationId": "list_scenarios_api_v1_scenarios_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 200,
+       "minimum": 1,
+       "default": 50,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0,
+       "title": "Offset"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Page_ScenarioOut_"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Create Scenario",
+    "operationId": "create_scenario_api_v1_scenarios_post",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SyntheticScenarioCreate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ScenarioOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}": {
+   "get": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Get One",
+    "operationId": "get_one_api_v1_scenarios__scenario_id__get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ScenarioOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Update Scenario",
+    "operationId": "update_scenario_api_v1_scenarios__scenario_id__patch",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ScenarioUpdate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ScenarioOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}/clone": {
+   "post": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Clone",
+    "operationId": "clone_api_v1_scenarios__scenario_id__clone_post",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CloneRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ScenarioOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}/validate": {
+   "post": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Validate",
+    "operationId": "validate_api_v1_scenarios__scenario_id__validate_post",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InputValidation"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}/geo": {
+   "get": {
+    "tags": [
+     "scenarios"
+    ],
+    "summary": "Geo",
+    "operationId": "geo_api_v1_scenarios__scenario_id__geo_get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/GeoOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/algorithms": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Algorithms",
+    "operationId": "algorithms_api_v1_algorithms_get",
+    "parameters": [
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/AlgorithmOut"
+         },
+         "title": "Response Algorithms Api V1 Algorithms Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}/runs": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Create Run",
+    "operationId": "create_run_api_v1_scenarios__scenario_id__runs_post",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RunCreate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/scenarios/{scenario_id}/experiments": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Create Experiment",
+    "description": "Enqueue algorithms × seeds on ONE shared snapshot so results are directly comparable.",
+    "operationId": "create_experiment_api_v1_scenarios__scenario_id__experiments_post",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ExperimentCreate"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ExperimentOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "List Runs",
+    "operationId": "list_runs_api_v1_runs_get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     },
+     {
+      "name": "algorithm",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Algorithm"
+      }
+     },
+     {
+      "name": "problem_type",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Problem Type"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 200,
+       "minimum": 1,
+       "default": 50,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0,
+       "title": "Offset"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Page_RunOut_"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Get One",
+    "operationId": "get_one_api_v1_runs__run_id__get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/cancel": {
+   "post": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Cancel",
+    "operationId": "cancel_api_v1_runs__run_id__cancel_post",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RunOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/schedule": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Schedule",
+    "operationId": "schedule_api_v1_runs__run_id__schedule_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ScheduleOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/validation": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Validation",
+    "operationId": "validation_api_v1_runs__run_id__validation_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ValidationReport"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/metrics": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Metrics",
+    "operationId": "metrics_api_v1_runs__run_id__metrics_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MetricsOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{run_id}/compare": {
+   "get": {
+    "tags": [
+     "runs"
+    ],
+    "summary": "Compare",
+    "operationId": "compare_api_v1_runs__run_id__compare_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Run Id"
+      }
+     },
+     {
+      "name": "ids",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "comma-separated run ids; default: all runs of the same scenario & snapshot",
+       "title": "Ids"
+      },
+      "description": "comma-separated run ids; default: all runs of the same scenario & snapshot"
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CompareOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/dashboard/summary": {
+   "get": {
+    "tags": [
+     "dashboard"
+    ],
+    "summary": "Summary",
+    "operationId": "summary_api_v1_dashboard_summary_get",
+    "parameters": [
+     {
+      "name": "scenario_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Scenario Id"
+      }
+     },
+     {
+      "name": "authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DashboardOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AlgorithmOut": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "problem_types": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Problem Types"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "available": {
+      "type": "boolean",
+      "title": "Available"
+     },
+     "stochastic": {
+      "type": "boolean",
+      "title": "Stochastic"
+     },
+     "phase": {
+      "type": "string",
+      "title": "Phase"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name",
+     "problem_types",
+     "kind",
+     "description",
+     "available",
+     "stochastic",
+     "phase"
+    ],
+    "title": "AlgorithmOut"
+   },
+   "AuditOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "user_email": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "User Email"
+     },
+     "action": {
+      "type": "string",
+      "title": "Action"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "entity_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Id"
+     },
+     "before_ref": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Before Ref"
+     },
+     "after_ref": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "After Ref"
+     },
+     "detail": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Detail"
+     },
+     "request_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Request Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "user_email",
+     "action",
+     "entity_type",
+     "entity_id",
+     "before_ref",
+     "after_ref",
+     "detail",
+     "request_id",
+     "created_at"
+    ],
+    "title": "AuditOut"
+   },
+   "Body_import_orders_api_v1_imports_orders_post": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "file"
+    ],
+    "title": "Body_import_orders_api_v1_imports_orders_post"
+   },
+   "CloneRequest": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "CloneRequest"
+   },
+   "CompareOut": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "snapshot_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Snapshot Ids"
+     },
+     "same_snapshot": {
+      "type": "boolean",
+      "title": "Same Snapshot"
+     },
+     "objective_note": {
+      "type": "string",
+      "title": "Objective Note"
+     },
+     "rows": {
+      "items": {
+       "$ref": "#/components/schemas/CompareRow"
+      },
+      "type": "array",
+      "title": "Rows"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "snapshot_ids",
+     "same_snapshot",
+     "objective_note",
+     "rows"
+    ],
+    "title": "CompareOut"
+   },
+   "CompareRow": {
+    "properties": {
+     "run_id": {
+      "type": "integer",
+      "title": "Run Id"
+     },
+     "algorithm": {
+      "type": "string",
+      "title": "Algorithm"
+     },
+     "problem_type": {
+      "type": "string",
+      "title": "Problem Type"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "solver_status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Status"
+     },
+     "is_feasible": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Is Feasible"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "runtime_ms": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Runtime Ms"
+     },
+     "total_cost": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Cost"
+     },
+     "cost": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cost"
+     },
+     "on_time_rate": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "On Time Rate"
+     },
+     "total_lateness_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Lateness Min"
+     },
+     "total_distance_km": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Distance Km"
+     },
+     "vehicles_used": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vehicles Used"
+     },
+     "orders_unserved": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Orders Unserved"
+     },
+     "warehouse_makespan_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Warehouse Makespan Min"
+     },
+     "end_to_end_makespan_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "End To End Makespan Min"
+     },
+     "avg_utilization": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "type": "number"
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Avg Utilization"
+     },
+     "changed_tasks": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Changed Tasks"
+     },
+     "stability_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Stability Score"
+     },
+     "gap": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gap"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "algorithm",
+     "problem_type",
+     "status",
+     "solver_status",
+     "is_feasible",
+     "seed",
+     "runtime_ms",
+     "total_cost",
+     "cost",
+     "on_time_rate",
+     "total_lateness_min",
+     "total_distance_km",
+     "vehicles_used",
+     "orders_unserved",
+     "warehouse_makespan_min",
+     "end_to_end_makespan_min",
+     "avg_utilization",
+     "changed_tasks",
+     "stability_score",
+     "gap"
+    ],
+    "title": "CompareRow"
+   },
+   "CostBreakdown": {
+    "properties": {
+     "currency": {
+      "type": "string",
+      "title": "Currency",
+      "default": "KRW"
+     },
+     "transport_fixed": {
+      "type": "number",
+      "title": "Transport Fixed",
+      "default": 0.0
+     },
+     "distance_cost": {
+      "type": "number",
+      "title": "Distance Cost",
+      "default": 0.0
+     },
+     "labor_cost": {
+      "type": "number",
+      "title": "Labor Cost",
+      "default": 0.0
+     },
+     "overtime_cost": {
+      "type": "number",
+      "title": "Overtime Cost",
+      "default": 0.0
+     },
+     "late_delivery_penalty": {
+      "type": "number",
+      "title": "Late Delivery Penalty",
+      "default": 0.0
+     },
+     "unserved_penalty": {
+      "type": "number",
+      "title": "Unserved Penalty",
+      "default": 0.0
+     },
+     "schedule_change_penalty": {
+      "type": "number",
+      "title": "Schedule Change Penalty",
+      "default": 0.0
+     },
+     "total_cost": {
+      "type": "number",
+      "title": "Total Cost",
+      "default": 0.0
+     },
+     "coefficients": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Coefficients",
+      "default": {}
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "CostBreakdown"
+   },
+   "DashboardOut": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "scenario_name": {
+      "type": "string",
+      "title": "Scenario Name"
+     },
+     "orders_by_status": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Orders By Status"
+     },
+     "orders_by_priority": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Orders By Priority"
+     },
+     "resources": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Resources"
+     },
+     "vehicles_by_status": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Vehicles By Status"
+     },
+     "runs_by_status": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Runs By Status"
+     },
+     "latest_runs": {
+      "items": {
+       "$ref": "#/components/schemas/RunOut"
+      },
+      "type": "array",
+      "title": "Latest Runs"
+     },
+     "latest_success": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/RunOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "kpi_source": {
+      "type": "string",
+      "title": "Kpi Source"
+     },
+     "recent_events": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Recent Events"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "scenario_name",
+     "orders_by_status",
+     "orders_by_priority",
+     "resources",
+     "vehicles_by_status",
+     "runs_by_status",
+     "latest_runs",
+     "latest_success",
+     "kpi_source",
+     "recent_events"
+    ],
+    "title": "DashboardOut"
+   },
+   "DependencyCheck": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "detail": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name",
+     "ok"
+    ],
+    "title": "DependencyCheck"
+   },
+   "DockIn": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "vehicle_classes": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "van",
+        "truck"
+       ]
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Vehicle Classes"
+     },
+     "open_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Open Start Local Min"
+     },
+     "open_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Open End Local Min"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "name",
+     "vehicle_classes",
+     "open_start_local_min",
+     "open_end_local_min"
+    ],
+    "title": "DockIn"
+   },
+   "DockOut": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "vehicle_classes": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "van",
+        "truck"
+       ]
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Vehicle Classes"
+     },
+     "open_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Open Start Local Min"
+     },
+     "open_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Open End Local Min"
+     },
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "active": {
+      "type": "boolean",
+      "title": "Active"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "name",
+     "vehicle_classes",
+     "open_start_local_min",
+     "open_end_local_min",
+     "id",
+     "active"
+    ],
+    "title": "DockOut"
+   },
+   "EventIn": {
+    "properties": {
+     "event_type": {
+      "type": "string",
+      "enum": [
+       "urgent_order",
+       "worker_absence",
+       "pack_station_outage",
+       "dock_outage",
+       "vehicle_breakdown",
+       "travel_time_increase",
+       "order_cancellation"
+      ],
+      "title": "Event Type"
+     },
+     "event_time_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Event Time Min",
+      "description": "minutes from the scenario horizon start"
+     },
+     "affected_code": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 40
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Affected Code"
+     },
+     "payload": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Payload"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 80
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     }
+    },
+    "type": "object",
+    "required": [
+     "event_type",
+     "event_time_min"
+    ],
+    "title": "EventIn"
+   },
+   "EventOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "idempotency_key": {
+      "type": "string",
+      "title": "Idempotency Key"
+     },
+     "event_type": {
+      "type": "string",
+      "title": "Event Type"
+     },
+     "event_time_min": {
+      "type": "integer",
+      "title": "Event Time Min"
+     },
+     "affected_type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Affected Type"
+     },
+     "affected_code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Affected Code"
+     },
+     "payload": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Payload"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "scenario_id",
+     "idempotency_key",
+     "event_type",
+     "event_time_min",
+     "affected_type",
+     "affected_code",
+     "payload",
+     "created_at"
+    ],
+    "title": "EventOut"
+   },
+   "ExperimentCreate": {
+    "properties": {
+     "problem_type": {
+      "type": "string",
+      "enum": [
+       "warehouse",
+       "dock",
+       "routing",
+       "integrated"
+      ],
+      "title": "Problem Type"
+     },
+     "algorithms": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 12,
+      "minItems": 1,
+      "title": "Algorithms"
+     },
+     "seeds": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "maxItems": 20,
+      "minItems": 1,
+      "title": "Seeds",
+      "default": [
+       0
+      ]
+     },
+     "time_limit_s": {
+      "type": "number",
+      "maximum": 120.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Time Limit S",
+      "default": 5.0
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     }
+    },
+    "type": "object",
+    "required": [
+     "problem_type",
+     "algorithms"
+    ],
+    "title": "ExperimentCreate"
+   },
+   "ExperimentOut": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "snapshot_id": {
+      "type": "integer",
+      "title": "Snapshot Id"
+     },
+     "run_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Run Ids"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "snapshot_id",
+     "run_ids",
+     "note"
+    ],
+    "title": "ExperimentOut"
+   },
+   "FacilityOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "timezone": {
+      "type": "string",
+      "title": "Timezone"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "code",
+     "name",
+     "timezone"
+    ],
+    "title": "FacilityOut"
+   },
+   "GeoOut": {
+    "properties": {
+     "coordinate_provenance": {
+      "type": "string",
+      "title": "Coordinate Provenance"
+     },
+     "travel_provenance": {
+      "type": "string",
+      "title": "Travel Provenance"
+     },
+     "travel_notes": {
+      "type": "string",
+      "title": "Travel Notes"
+     },
+     "points": {
+      "items": {
+       "$ref": "#/components/schemas/GeoPoint"
+      },
+      "type": "array",
+      "title": "Points"
+     }
+    },
+    "type": "object",
+    "required": [
+     "coordinate_provenance",
+     "travel_provenance",
+     "travel_notes",
+     "points"
+    ],
+    "title": "GeoOut"
+   },
+   "GeoPoint": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "depot",
+       "customer"
+      ],
+      "title": "Kind"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "x_km": {
+      "type": "number",
+      "title": "X Km"
+     },
+     "y_km": {
+      "type": "number",
+      "title": "Y Km"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lon": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lon"
+     },
+     "tw_start": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tw Start"
+     },
+     "tw_end": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tw End"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "name",
+     "x_km",
+     "y_km",
+     "lat",
+     "lon"
+    ],
+    "title": "GeoPoint"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "ImportError_": {
+    "properties": {
+     "row": {
+      "type": "integer",
+      "title": "Row"
+     },
+     "field": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Field"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "row",
+     "field",
+     "message"
+    ],
+    "title": "ImportError_"
+   },
+   "ImportResult": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "created_orders": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Created Orders"
+     },
+     "lines": {
+      "type": "integer",
+      "title": "Lines"
+     },
+     "errors": {
+      "items": {
+       "$ref": "#/components/schemas/ImportError_"
+      },
+      "type": "array",
+      "title": "Errors"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "created_orders",
+     "lines",
+     "errors"
+    ],
+    "title": "ImportResult"
+   },
+   "InputIssue": {
+    "properties": {
+     "severity": {
+      "type": "string",
+      "enum": [
+       "error",
+       "warning",
+       "info"
+      ],
+      "title": "Severity"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "entity": {
+      "type": "string",
+      "title": "Entity"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "severity",
+     "code",
+     "entity",
+     "message"
+    ],
+    "title": "InputIssue"
+   },
+   "InputValidation": {
+    "properties": {
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "issues": {
+      "items": {
+       "$ref": "#/components/schemas/InputIssue"
+      },
+      "type": "array",
+      "title": "Issues"
+     },
+     "summary": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Summary"
+     }
+    },
+    "type": "object",
+    "required": [
+     "ok",
+     "issues",
+     "summary"
+    ],
+    "title": "InputValidation"
+   },
+   "Interval": {
+    "properties": {
+     "start": {
+      "type": "integer",
+      "title": "Start"
+     },
+     "end": {
+      "type": "integer",
+      "title": "End"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "start",
+     "end"
+    ],
+    "title": "Interval"
+   },
+   "LiveResponse": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "const": "ok",
+      "title": "Status"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status"
+    ],
+    "title": "LiveResponse"
+   },
+   "LoginRequest": {
+    "properties": {
+     "email": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 3,
+      "title": "Email"
+     },
+     "password": {
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Password"
+     }
+    },
+    "type": "object",
+    "required": [
+     "email",
+     "password"
+    ],
+    "title": "LoginRequest"
+   },
+   "LoginResponse": {
+    "properties": {
+     "access_token": {
+      "type": "string",
+      "title": "Access Token"
+     },
+     "token_type": {
+      "type": "string",
+      "title": "Token Type",
+      "default": "bearer"
+     },
+     "user": {
+      "$ref": "#/components/schemas/UserOut"
+     },
+     "environment": {
+      "type": "string",
+      "title": "Environment"
+     }
+    },
+    "type": "object",
+    "required": [
+     "access_token",
+     "user",
+     "environment"
+    ],
+    "title": "LoginResponse"
+   },
+   "MetricsOut": {
+    "properties": {
+     "run_id": {
+      "type": "integer",
+      "title": "Run Id"
+     },
+     "algorithm": {
+      "type": "string",
+      "title": "Algorithm"
+     },
+     "metrics": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ScheduleMetrics"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "solver_status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Status"
+     },
+     "solver_objective": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Objective"
+     },
+     "best_bound": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Best Bound"
+     },
+     "gap": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gap"
+     },
+     "gap_note": {
+      "type": "string",
+      "title": "Gap Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "algorithm",
+     "metrics",
+     "solver_status",
+     "gap_note"
+    ],
+    "title": "MetricsOut"
+   },
+   "ObjectiveWeights": {
+    "properties": {
+     "currency": {
+      "type": "string",
+      "title": "Currency",
+      "default": "KRW"
+     },
+     "late_penalty_per_min": {
+      "type": "number",
+      "title": "Late Penalty Per Min",
+      "default": 1000.0
+     },
+     "unserved_penalty": {
+      "type": "number",
+      "title": "Unserved Penalty",
+      "default": 300000.0
+     },
+     "overtime_premium": {
+      "type": "number",
+      "title": "Overtime Premium",
+      "default": 0.5
+     },
+     "change_penalty_per_task": {
+      "type": "number",
+      "title": "Change Penalty Per Task",
+      "default": 5000.0
+     },
+     "change_penalty_per_route": {
+      "type": "number",
+      "title": "Change Penalty Per Route",
+      "default": 20000.0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "ObjectiveWeights"
+   },
+   "OrderCreate": {
+    "properties": {
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 40,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "customer_code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Customer Code"
+     },
+     "release_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Release At"
+     },
+     "due_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Due At"
+     },
+     "priority": {
+      "type": "integer",
+      "maximum": 3.0,
+      "minimum": 1.0,
+      "title": "Priority",
+      "default": 1
+     },
+     "lines": {
+      "items": {
+       "$ref": "#/components/schemas/OrderLineIn"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Lines"
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenario_id",
+     "code",
+     "customer_code",
+     "release_at",
+     "due_at",
+     "lines"
+    ],
+    "title": "OrderCreate"
+   },
+   "OrderInfo": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "customer_id": {
+      "type": "string",
+      "title": "Customer Id"
+     },
+     "release_min": {
+      "type": "integer",
+      "title": "Release Min"
+     },
+     "due_min": {
+      "type": "integer",
+      "title": "Due Min"
+     },
+     "priority": {
+      "type": "integer",
+      "title": "Priority"
+     },
+     "weight_kg": {
+      "type": "integer",
+      "title": "Weight Kg"
+     },
+     "tw_start": {
+      "type": "integer",
+      "title": "Tw Start"
+     },
+     "tw_end": {
+      "type": "integer",
+      "title": "Tw End"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "customer_id",
+     "release_min",
+     "due_min",
+     "priority",
+     "weight_kg",
+     "tw_start",
+     "tw_end"
+    ],
+    "title": "OrderInfo"
+   },
+   "OrderLineIn": {
+    "properties": {
+     "sku_code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Sku Code"
+     },
+     "qty": {
+      "type": "integer",
+      "maximum": 10000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Qty"
+     }
+    },
+    "type": "object",
+    "required": [
+     "sku_code",
+     "qty"
+    ],
+    "title": "OrderLineIn"
+   },
+   "OrderLineOut": {
+    "properties": {
+     "sku_code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Sku Code"
+     },
+     "qty": {
+      "type": "integer",
+      "maximum": 10000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Qty"
+     }
+    },
+    "type": "object",
+    "required": [
+     "sku_code",
+     "qty"
+    ],
+    "title": "OrderLineOut"
+   },
+   "OrderOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "facility_code": {
+      "type": "string",
+      "title": "Facility Code"
+     },
+     "customer_code": {
+      "type": "string",
+      "title": "Customer Code"
+     },
+     "customer_name": {
+      "type": "string",
+      "title": "Customer Name"
+     },
+     "release_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Release At"
+     },
+     "due_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Due At"
+     },
+     "priority": {
+      "type": "integer",
+      "title": "Priority"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "units": {
+      "type": "integer",
+      "title": "Units"
+     },
+     "weight_kg": {
+      "type": "number",
+      "title": "Weight Kg"
+     },
+     "lines": {
+      "items": {
+       "$ref": "#/components/schemas/OrderLineOut"
+      },
+      "type": "array",
+      "title": "Lines"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "code",
+     "facility_code",
+     "customer_code",
+     "customer_name",
+     "release_at",
+     "due_at",
+     "priority",
+     "status",
+     "units",
+     "weight_kg",
+     "lines"
+    ],
+    "title": "OrderOut"
+   },
+   "Page_AuditOut_": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/AuditOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     },
+     "limit": {
+      "type": "integer",
+      "title": "Limit"
+     },
+     "offset": {
+      "type": "integer",
+      "title": "Offset"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "total",
+     "limit",
+     "offset"
+    ],
+    "title": "Page[AuditOut]"
+   },
+   "Page_OrderOut_": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/OrderOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     },
+     "limit": {
+      "type": "integer",
+      "title": "Limit"
+     },
+     "offset": {
+      "type": "integer",
+      "title": "Offset"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "total",
+     "limit",
+     "offset"
+    ],
+    "title": "Page[OrderOut]"
+   },
+   "Page_RunOut_": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/RunOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     },
+     "limit": {
+      "type": "integer",
+      "title": "Limit"
+     },
+     "offset": {
+      "type": "integer",
+      "title": "Offset"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "total",
+     "limit",
+     "offset"
+    ],
+    "title": "Page[RunOut]"
+   },
+   "Page_ScenarioOut_": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ScenarioOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     },
+     "limit": {
+      "type": "integer",
+      "title": "Limit"
+     },
+     "offset": {
+      "type": "integer",
+      "title": "Offset"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "total",
+     "limit",
+     "offset"
+    ],
+    "title": "Page[ScenarioOut]"
+   },
+   "ReadyResponse": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "enum": [
+       "ready",
+       "not_ready"
+      ],
+      "title": "Status"
+     },
+     "task_backend": {
+      "type": "string",
+      "title": "Task Backend"
+     },
+     "database_dialect": {
+      "type": "string",
+      "title": "Database Dialect"
+     },
+     "checks": {
+      "items": {
+       "$ref": "#/components/schemas/DependencyCheck"
+      },
+      "type": "array",
+      "title": "Checks"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status",
+     "task_backend",
+     "database_dialect",
+     "checks"
+    ],
+    "title": "ReadyResponse"
+   },
+   "RescheduleIn": {
+    "properties": {
+     "event_id": {
+      "type": "integer",
+      "title": "Event Id"
+     },
+     "policies": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "KEEP",
+        "PARTIAL",
+        "FULL"
+       ]
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Policies",
+      "default": [
+       "KEEP",
+       "PARTIAL",
+       "FULL"
+      ]
+     },
+     "reoptimizer": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 64
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reoptimizer"
+     },
+     "time_limit_s": {
+      "type": "number",
+      "maximum": 120.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Time Limit S",
+      "default": 10.0
+     },
+     "seed": {
+      "type": "integer",
+      "minimum": 0.0,
+      "title": "Seed",
+      "default": 0
+     },
+     "freeze_window_min": {
+      "type": "integer",
+      "maximum": 480.0,
+      "minimum": 0.0,
+      "title": "Freeze Window Min",
+      "default": 30
+     },
+     "expected_schedule_version": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Expected Schedule Version",
+      "description": "optimistic concurrency guard"
+     }
+    },
+    "type": "object",
+    "required": [
+     "event_id"
+    ],
+    "title": "RescheduleIn"
+   },
+   "RescheduleStarted": {
+    "properties": {
+     "base_run_id": {
+      "type": "integer",
+      "title": "Base Run Id"
+     },
+     "event_id": {
+      "type": "integer",
+      "title": "Event Id"
+     },
+     "reschedule_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Reschedule Ids"
+     },
+     "new_run_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "New Run Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "base_run_id",
+     "event_id",
+     "reschedule_ids",
+     "new_run_ids"
+    ],
+    "title": "RescheduleStarted"
+   },
+   "RescheduleSummary": {
+    "properties": {
+     "base_run_id": {
+      "type": "integer",
+      "title": "Base Run Id"
+     },
+     "items": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "recommendations": {
+      "additionalProperties": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "object",
+      "title": "Recommendations"
+     }
+    },
+    "type": "object",
+    "required": [
+     "base_run_id",
+     "items",
+     "recommendations"
+    ],
+    "title": "RescheduleSummary"
+   },
+   "ResourceLane": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "available": {
+      "items": {
+       "$ref": "#/components/schemas/Interval"
+      },
+      "type": "array",
+      "title": "Available"
+     },
+     "skills": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Skills",
+      "default": []
+     },
+     "regular_end": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Regular End"
+     },
+     "vehicle_classes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Vehicle Classes",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "name",
+     "available"
+    ],
+    "title": "ResourceLane"
+   },
+   "RouteStop": {
+    "properties": {
+     "seq": {
+      "type": "integer",
+      "title": "Seq"
+     },
+     "customer_id": {
+      "type": "string",
+      "title": "Customer Id"
+     },
+     "location_id": {
+      "type": "string",
+      "title": "Location Id"
+     },
+     "order_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Order Ids"
+     },
+     "arrival_min": {
+      "type": "integer",
+      "title": "Arrival Min"
+     },
+     "service_start_min": {
+      "type": "integer",
+      "title": "Service Start Min"
+     },
+     "service_end_min": {
+      "type": "integer",
+      "title": "Service End Min"
+     },
+     "departure_min": {
+      "type": "integer",
+      "title": "Departure Min"
+     },
+     "wait_min": {
+      "type": "integer",
+      "title": "Wait Min",
+      "default": 0
+     },
+     "late_min": {
+      "type": "integer",
+      "title": "Late Min",
+      "default": 0
+     },
+     "load_after_kg": {
+      "type": "integer",
+      "title": "Load After Kg",
+      "default": 0
+     },
+     "load_after_l": {
+      "type": "integer",
+      "title": "Load After L",
+      "default": 0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "seq",
+     "customer_id",
+     "location_id",
+     "order_ids",
+     "arrival_min",
+     "service_start_min",
+     "service_end_min",
+     "departure_min"
+    ],
+    "title": "RouteStop"
+   },
+   "RunCreate": {
+    "properties": {
+     "problem_type": {
+      "type": "string",
+      "enum": [
+       "warehouse",
+       "dock",
+       "routing",
+       "integrated"
+      ],
+      "title": "Problem Type"
+     },
+     "algorithm": {
+      "type": "string",
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Algorithm"
+     },
+     "time_limit_s": {
+      "type": "number",
+      "maximum": 600.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Time Limit S",
+      "default": 10.0
+     },
+     "seed": {
+      "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Seed",
+      "default": 0
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     }
+    },
+    "type": "object",
+    "required": [
+     "problem_type",
+     "algorithm"
+    ],
+    "title": "RunCreate"
+   },
+   "RunOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "scenario_id": {
+      "type": "integer",
+      "title": "Scenario Id"
+     },
+     "scenario_name": {
+      "type": "string",
+      "title": "Scenario Name"
+     },
+     "snapshot_id": {
+      "type": "integer",
+      "title": "Snapshot Id"
+     },
+     "snapshot_version": {
+      "type": "integer",
+      "title": "Snapshot Version"
+     },
+     "parent_run_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Run Id"
+     },
+     "schedule_version": {
+      "type": "integer",
+      "title": "Schedule Version"
+     },
+     "problem_type": {
+      "type": "string",
+      "title": "Problem Type"
+     },
+     "algorithm": {
+      "type": "string",
+      "title": "Algorithm"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "time_limit_s": {
+      "type": "number",
+      "title": "Time Limit S"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "solver_status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Status"
+     },
+     "progress": {
+      "type": "integer",
+      "title": "Progress"
+     },
+     "cancel_requested": {
+      "type": "boolean",
+      "title": "Cancel Requested"
+     },
+     "queued_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Queued At"
+     },
+     "started_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Started At"
+     },
+     "finished_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Finished At"
+     },
+     "runtime_ms": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Runtime Ms"
+     },
+     "is_feasible": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Is Feasible"
+     },
+     "objective_total": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Objective Total"
+     },
+     "error_message": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error Message"
+     },
+     "kpis": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Kpis"
+     },
+     "validation_summary": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Validation Summary"
+     },
+     "solver_metadata": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Metadata"
+     },
+     "horizon_start": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Horizon Start"
+     },
+     "timezone": {
+      "type": "string",
+      "title": "Timezone"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "scenario_id",
+     "scenario_name",
+     "snapshot_id",
+     "snapshot_version",
+     "parent_run_id",
+     "schedule_version",
+     "problem_type",
+     "algorithm",
+     "params",
+     "seed",
+     "time_limit_s",
+     "status",
+     "solver_status",
+     "progress",
+     "cancel_requested",
+     "queued_at",
+     "started_at",
+     "finished_at",
+     "runtime_ms",
+     "is_feasible",
+     "objective_total",
+     "error_message",
+     "kpis",
+     "validation_summary",
+     "solver_metadata",
+     "horizon_start",
+     "timezone"
+    ],
+    "title": "RunOut"
+   },
+   "ScenarioOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "facility": {
+      "$ref": "#/components/schemas/FacilityOut"
+     },
+     "operating_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Operating Date"
+     },
+     "horizon_start": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Horizon Start"
+     },
+     "horizon_min": {
+      "type": "integer",
+      "title": "Horizon Min"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "version": {
+      "type": "integer",
+      "title": "Version"
+     },
+     "parent_scenario_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Scenario Id"
+     },
+     "order_count": {
+      "type": "integer",
+      "title": "Order Count"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "params": {
+      "$ref": "#/components/schemas/ScenarioParams"
+     },
+     "weights": {
+      "$ref": "#/components/schemas/ObjectiveWeights"
+     },
+     "task_model": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Task Model"
+     },
+     "travel_params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Travel Params"
+     },
+     "resource_counts": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Resource Counts"
+     },
+     "snapshot_versions": {
+      "type": "integer",
+      "title": "Snapshot Versions"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "description",
+     "facility",
+     "operating_date",
+     "horizon_start",
+     "horizon_min",
+     "seed",
+     "status",
+     "version",
+     "parent_scenario_id",
+     "order_count",
+     "created_at",
+     "params",
+     "weights",
+     "task_model",
+     "travel_params",
+     "resource_counts",
+     "snapshot_versions"
+    ],
+    "title": "ScenarioOut"
+   },
+   "ScenarioParams": {
+    "properties": {
+     "time_window_mode": {
+      "type": "string",
+      "enum": [
+       "soft",
+       "hard"
+      ],
+      "title": "Time Window Mode",
+      "default": "soft"
+     },
+     "return_to_depot": {
+      "type": "boolean",
+      "title": "Return To Depot",
+      "default": true
+     },
+     "load_base_min": {
+      "type": "integer",
+      "title": "Load Base Min",
+      "default": 10
+     },
+     "load_per_order_min": {
+      "type": "integer",
+      "title": "Load Per Order Min",
+      "default": 2
+     },
+     "aggregate_same_customer": {
+      "type": "boolean",
+      "title": "Aggregate Same Customer",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "ScenarioParams"
+   },
+   "ScenarioUpdate": {
+    "properties": {
+     "version": {
+      "type": "integer",
+      "title": "Version",
+      "description": "optimistic-concurrency token from GET"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 120,
+        "minLength": 1
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 500
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     },
+     "seed": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Seed"
+     },
+     "horizon_min": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 2880.0,
+        "minimum": 60.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Horizon Min"
+     },
+     "params": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ScenarioParams"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "weights": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ObjectiveWeights"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "version"
+    ],
+    "title": "ScenarioUpdate"
+   },
+   "ScheduleMetrics": {
+    "properties": {
+     "cost": {
+      "$ref": "#/components/schemas/CostBreakdown"
+     },
+     "orders_total": {
+      "type": "integer",
+      "title": "Orders Total",
+      "default": 0
+     },
+     "orders_served": {
+      "type": "integer",
+      "title": "Orders Served",
+      "default": 0
+     },
+     "orders_unserved": {
+      "type": "integer",
+      "title": "Orders Unserved",
+      "default": 0
+     },
+     "on_time_rate": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "On Time Rate"
+     },
+     "total_lateness_min": {
+      "type": "integer",
+      "title": "Total Lateness Min",
+      "default": 0
+     },
+     "max_lateness_min": {
+      "type": "integer",
+      "title": "Max Lateness Min",
+      "default": 0
+     },
+     "warehouse_makespan_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Warehouse Makespan Min"
+     },
+     "end_to_end_makespan_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "End To End Makespan Min"
+     },
+     "total_distance_km": {
+      "type": "number",
+      "title": "Total Distance Km",
+      "default": 0.0
+     },
+     "vehicles_used": {
+      "type": "integer",
+      "title": "Vehicles Used",
+      "default": 0
+     },
+     "resource_utilization": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Resource Utilization",
+      "default": {}
+     },
+     "avg_utilization": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Avg Utilization",
+      "default": {}
+     },
+     "overtime_min": {
+      "type": "integer",
+      "title": "Overtime Min",
+      "default": 0
+     },
+     "changed_tasks": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Changed Tasks"
+     },
+     "changed_routes": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Changed Routes"
+     },
+     "stability_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Stability Score"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "cost"
+    ],
+    "title": "ScheduleMetrics"
+   },
+   "ScheduleOut": {
+    "properties": {
+     "run_id": {
+      "type": "integer",
+      "title": "Run Id"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "problem_type": {
+      "type": "string",
+      "title": "Problem Type"
+     },
+     "algorithm": {
+      "type": "string",
+      "title": "Algorithm"
+     },
+     "horizon_start": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Horizon Start"
+     },
+     "horizon_min": {
+      "type": "integer",
+      "title": "Horizon Min"
+     },
+     "timezone": {
+      "type": "string",
+      "title": "Timezone"
+     },
+     "current_time_min": {
+      "type": "integer",
+      "title": "Current Time Min"
+     },
+     "assignments": {
+      "items": {
+       "$ref": "#/components/schemas/TaskAssignment"
+      },
+      "type": "array",
+      "title": "Assignments"
+     },
+     "routes": {
+      "items": {
+       "$ref": "#/components/schemas/VehicleRoute"
+      },
+      "type": "array",
+      "title": "Routes"
+     },
+     "unserved": {
+      "items": {
+       "$ref": "#/components/schemas/UnservedOrder"
+      },
+      "type": "array",
+      "title": "Unserved"
+     },
+     "resources": {
+      "items": {
+       "$ref": "#/components/schemas/ResourceLane"
+      },
+      "type": "array",
+      "title": "Resources"
+     },
+     "vehicles": {
+      "items": {
+       "$ref": "#/components/schemas/VehicleInfo"
+      },
+      "type": "array",
+      "title": "Vehicles"
+     },
+     "orders": {
+      "items": {
+       "$ref": "#/components/schemas/OrderInfo"
+      },
+      "type": "array",
+      "title": "Orders"
+     },
+     "travel_provenance": {
+      "type": "string",
+      "title": "Travel Provenance"
+     },
+     "geometry_note": {
+      "type": "string",
+      "title": "Geometry Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_id",
+     "status",
+     "problem_type",
+     "algorithm",
+     "horizon_start",
+     "horizon_min",
+     "timezone",
+     "current_time_min",
+     "assignments",
+     "routes",
+     "unserved",
+     "resources",
+     "vehicles",
+     "orders",
+     "travel_provenance",
+     "geometry_note"
+    ],
+    "title": "ScheduleOut"
+   },
+   "SyntheticScenarioCreate": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "description": {
+      "type": "string",
+      "maxLength": 500,
+      "title": "Description",
+      "default": ""
+     },
+     "seed": {
+      "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Seed",
+      "default": 1
+     },
+     "operating_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Operating Date",
+      "default": "2026-10-15"
+     },
+     "n_orders": {
+      "type": "integer",
+      "maximum": 500.0,
+      "minimum": 1.0,
+      "title": "N Orders",
+      "default": 30
+     },
+     "n_workers": {
+      "type": "integer",
+      "maximum": 60.0,
+      "minimum": 1.0,
+      "title": "N Workers",
+      "default": 5
+     },
+     "n_pack_stations": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 1.0,
+      "title": "N Pack Stations",
+      "default": 2
+     },
+     "n_docks": {
+      "type": "integer",
+      "maximum": 10.0,
+      "minimum": 1.0,
+      "title": "N Docks",
+      "default": 2
+     },
+     "n_vans": {
+      "type": "integer",
+      "maximum": 50.0,
+      "minimum": 0.0,
+      "title": "N Vans",
+      "default": 3
+     },
+     "n_trucks": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 0.0,
+      "title": "N Trucks",
+      "default": 1
+     },
+     "area_km": {
+      "type": "number",
+      "maximum": 100.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Area Km",
+      "default": 15.0
+     },
+     "deadline_tightness": {
+      "type": "number",
+      "maximum": 3.0,
+      "minimum": 0.5,
+      "title": "Deadline Tightness",
+      "default": 1.0
+     },
+     "inventory_shortage_skus": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 0.0,
+      "title": "Inventory Shortage Skus",
+      "default": 0
+     },
+     "time_window_mode": {
+      "type": "string",
+      "enum": [
+       "soft",
+       "hard"
+      ],
+      "title": "Time Window Mode",
+      "default": "soft"
+     },
+     "weights": {
+      "$ref": "#/components/schemas/ObjectiveWeights",
+      "default": {
+       "currency": "KRW",
+       "late_penalty_per_min": 1000.0,
+       "unserved_penalty": 300000.0,
+       "overtime_premium": 0.5,
+       "change_penalty_per_task": 5000.0,
+       "change_penalty_per_route": 20000.0
+      }
+     }
+    },
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "SyntheticScenarioCreate",
+    "description": "Scenario builder: generate a deterministic synthetic world (seeded) and save it."
+   },
+   "TaskAssignment": {
+    "properties": {
+     "task_id": {
+      "type": "string",
+      "title": "Task Id"
+     },
+     "task_type": {
+      "type": "string",
+      "enum": [
+       "PICK",
+       "PACK",
+       "LOAD"
+      ],
+      "title": "Task Type"
+     },
+     "order_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Order Ids"
+     },
+     "resource_id": {
+      "type": "string",
+      "title": "Resource Id"
+     },
+     "resources": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "type": "object",
+      "title": "Resources"
+     },
+     "start_min": {
+      "type": "integer",
+      "title": "Start Min"
+     },
+     "end_min": {
+      "type": "integer",
+      "title": "End Min"
+     },
+     "frozen": {
+      "type": "boolean",
+      "title": "Frozen",
+      "default": false
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "task_id",
+     "task_type",
+     "order_ids",
+     "resource_id",
+     "resources",
+     "start_min",
+     "end_min"
+    ],
+    "title": "TaskAssignment"
+   },
+   "UnservedOrder": {
+    "properties": {
+     "order_id": {
+      "type": "string",
+      "title": "Order Id"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "penalty": {
+      "type": "number",
+      "title": "Penalty",
+      "default": 0.0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "order_id",
+     "reason"
+    ],
+    "title": "UnservedOrder"
+   },
+   "UserOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "email": {
+      "type": "string",
+      "title": "Email"
+     },
+     "display_name": {
+      "type": "string",
+      "title": "Display Name"
+     },
+     "role": {
+      "type": "string",
+      "title": "Role"
+     },
+     "is_demo": {
+      "type": "boolean",
+      "title": "Is Demo"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "email",
+     "display_name",
+     "role",
+     "is_demo"
+    ],
+    "title": "UserOut"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   },
+   "ValidationReport": {
+    "properties": {
+     "is_feasible": {
+      "type": "boolean",
+      "title": "Is Feasible"
+     },
+     "scope": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Scope"
+     },
+     "checked_rules": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Checked Rules"
+     },
+     "violations": {
+      "items": {
+       "$ref": "#/components/schemas/Violation"
+      },
+      "type": "array",
+      "title": "Violations"
+     },
+     "unserved": {
+      "items": {
+       "$ref": "#/components/schemas/UnservedOrder"
+      },
+      "type": "array",
+      "title": "Unserved",
+      "default": []
+     },
+     "stats": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Stats",
+      "default": {}
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "is_feasible",
+     "scope",
+     "checked_rules",
+     "violations"
+    ],
+    "title": "ValidationReport"
+   },
+   "VehicleIn": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "vehicle_class": {
+      "type": "string",
+      "enum": [
+       "van",
+       "truck"
+      ],
+      "title": "Vehicle Class",
+      "default": "van"
+     },
+     "capacity_kg": {
+      "type": "integer",
+      "maximum": 50000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Capacity Kg"
+     },
+     "capacity_l": {
+      "type": "integer",
+      "maximum": 200000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Capacity L"
+     },
+     "fixed_cost": {
+      "type": "number",
+      "minimum": 0.0,
+      "title": "Fixed Cost"
+     },
+     "cost_per_km": {
+      "type": "number",
+      "minimum": 0.0,
+      "title": "Cost Per Km"
+     },
+     "shift_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift Start Local Min"
+     },
+     "shift_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift End Local Min"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "AVAILABLE",
+       "MAINTENANCE",
+       "BROKEN"
+      ],
+      "title": "Status",
+      "default": "AVAILABLE"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "capacity_kg",
+     "capacity_l",
+     "fixed_cost",
+     "cost_per_km",
+     "shift_start_local_min",
+     "shift_end_local_min"
+    ],
+    "title": "VehicleIn"
+   },
+   "VehicleInfo": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "vehicle_class": {
+      "type": "string",
+      "title": "Vehicle Class"
+     },
+     "capacity_kg": {
+      "type": "integer",
+      "title": "Capacity Kg"
+     },
+     "capacity_l": {
+      "type": "integer",
+      "title": "Capacity L"
+     },
+     "shift_start": {
+      "type": "integer",
+      "title": "Shift Start"
+     },
+     "shift_end": {
+      "type": "integer",
+      "title": "Shift End"
+     },
+     "available": {
+      "type": "boolean",
+      "title": "Available"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "vehicle_class",
+     "capacity_kg",
+     "capacity_l",
+     "shift_start",
+     "shift_end",
+     "available"
+    ],
+    "title": "VehicleInfo"
+   },
+   "VehicleOut": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "vehicle_class": {
+      "type": "string",
+      "enum": [
+       "van",
+       "truck"
+      ],
+      "title": "Vehicle Class",
+      "default": "van"
+     },
+     "capacity_kg": {
+      "type": "integer",
+      "maximum": 50000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Capacity Kg"
+     },
+     "capacity_l": {
+      "type": "integer",
+      "maximum": 200000.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Capacity L"
+     },
+     "fixed_cost": {
+      "type": "number",
+      "minimum": 0.0,
+      "title": "Fixed Cost"
+     },
+     "cost_per_km": {
+      "type": "number",
+      "minimum": 0.0,
+      "title": "Cost Per Km"
+     },
+     "shift_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift Start Local Min"
+     },
+     "shift_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift End Local Min"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "AVAILABLE",
+       "MAINTENANCE",
+       "BROKEN"
+      ],
+      "title": "Status",
+      "default": "AVAILABLE"
+     },
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "capacity_kg",
+     "capacity_l",
+     "fixed_cost",
+     "cost_per_km",
+     "shift_start_local_min",
+     "shift_end_local_min",
+     "id"
+    ],
+    "title": "VehicleOut"
+   },
+   "VehicleRoute": {
+    "properties": {
+     "vehicle_id": {
+      "type": "string",
+      "title": "Vehicle Id"
+     },
+     "dock_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Dock Id"
+     },
+     "order_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Order Ids"
+     },
+     "ready_min": {
+      "type": "integer",
+      "title": "Ready Min",
+      "default": 0
+     },
+     "load_start_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Load Start Min"
+     },
+     "load_end_min": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Load End Min"
+     },
+     "departure_min": {
+      "type": "integer",
+      "title": "Departure Min"
+     },
+     "return_min": {
+      "type": "integer",
+      "title": "Return Min"
+     },
+     "stops": {
+      "items": {
+       "$ref": "#/components/schemas/RouteStop"
+      },
+      "type": "array",
+      "title": "Stops"
+     },
+     "distance_m": {
+      "type": "integer",
+      "title": "Distance M"
+     },
+     "load_kg": {
+      "type": "integer",
+      "title": "Load Kg"
+     },
+     "load_l": {
+      "type": "integer",
+      "title": "Load L"
+     },
+     "geometry": {
+      "type": "string",
+      "enum": [
+       "schematic_straight_line",
+       "road"
+      ],
+      "title": "Geometry",
+      "default": "schematic_straight_line"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "vehicle_id",
+     "order_ids",
+     "departure_min",
+     "return_min",
+     "stops",
+     "distance_m",
+     "load_kg",
+     "load_l"
+    ],
+    "title": "VehicleRoute"
+   },
+   "Violation": {
+    "properties": {
+     "rule": {
+      "type": "string",
+      "title": "Rule"
+     },
+     "severity": {
+      "type": "string",
+      "enum": [
+       "error",
+       "warning",
+       "info"
+      ],
+      "title": "Severity",
+      "default": "error"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "entity_id": {
+      "type": "string",
+      "title": "Entity Id"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     },
+     "observed": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Observed",
+      "default": {}
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "rule",
+     "entity_type",
+     "entity_id",
+     "message"
+    ],
+    "title": "Violation"
+   },
+   "WorkerIn": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "skills": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "pick",
+        "pack",
+        "cold"
+       ]
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Skills"
+     },
+     "hourly_cost": {
+      "type": "number",
+      "maximum": 1000000.0,
+      "minimum": 0.0,
+      "title": "Hourly Cost"
+     },
+     "shift_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift Start Local Min"
+     },
+     "shift_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift End Local Min"
+     },
+     "regular_end_local_min": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 2880.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Regular End Local Min"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "name",
+     "skills",
+     "hourly_cost",
+     "shift_start_local_min",
+     "shift_end_local_min"
+    ],
+    "title": "WorkerIn"
+   },
+   "WorkerOut": {
+    "properties": {
+     "facility_id": {
+      "type": "integer",
+      "title": "Facility Id"
+     },
+     "code": {
+      "type": "string",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "skills": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "pick",
+        "pack",
+        "cold"
+       ]
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Skills"
+     },
+     "hourly_cost": {
+      "type": "number",
+      "maximum": 1000000.0,
+      "minimum": 0.0,
+      "title": "Hourly Cost"
+     },
+     "shift_start_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift Start Local Min"
+     },
+     "shift_end_local_min": {
+      "type": "integer",
+      "maximum": 2880.0,
+      "minimum": 0.0,
+      "title": "Shift End Local Min"
+     },
+     "regular_end_local_min": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 2880.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Regular End Local Min"
+     },
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "active": {
+      "type": "boolean",
+      "title": "Active"
+     }
+    },
+    "type": "object",
+    "required": [
+     "facility_id",
+     "code",
+     "name",
+     "skills",
+     "hourly_cost",
+     "shift_start_local_min",
+     "shift_end_local_min",
+     "id",
+     "active"
+    ],
+    "title": "WorkerOut"
+   }
+  }
+ }
+}

@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 
-from app.api.v1 import audit, auth, dashboard, disruptions, health, master, runs, scenarios
+from app.api.v1 import audit, auth, dashboard, disruptions, health, io, master, ops, runs, scenarios
 
 api_router = APIRouter()
 api_router.include_router(disruptions.router)
+api_router.include_router(io.router)
+api_router.include_router(ops.router)
 api_router.include_router(audit.router)
 api_router.include_router(health.router)
 api_router.include_router(auth.router)

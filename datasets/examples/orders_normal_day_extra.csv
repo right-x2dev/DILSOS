@@ -1,0 +1,5 @@
+order_code,customer_code,release_local,due_local,priority,sku_code,qty
+EXTRA-001,C001,08:30,12:00,2,SKU001,2
+EXTRA-001,C001,08:30,12:00,2,SKU005,1
+EXTRA-002,C010,09:00,13:30,1,SKU012,3
+EXTRA-003,C020,10:15,15:00,3,SKU020,1

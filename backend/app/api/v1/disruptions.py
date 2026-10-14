@@ -12,6 +12,7 @@ from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession, WriterUser
 from app.api.errors import ApiError
+from app.api.ratelimit import check_rate
 from app.api.v1.runs import get_run
 from app.api.v1.scenarios import get_scenario
 from app.db import models as m
@@ -143,6 +144,7 @@ class RescheduleStarted(BaseModel):
 @router.post("/runs/{run_id}/reschedule", response_model=RescheduleStarted, status_code=202)
 def reschedule(run_id: int, body: RescheduleIn, db: DbSession, user: WriterUser) -> RescheduleStarted:
     base = get_run(db, run_id)
+    check_rate(user.id, "reschedule")
     if body.expected_schedule_version is not None and body.expected_schedule_version != base.schedule_version:
         raise ApiError(409, "version_conflict", "base schedule version changed", {"current": base.schedule_version})
     ev = db.get(m.DisruptionEvent, body.event_id)

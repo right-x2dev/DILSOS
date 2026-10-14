@@ -61,3 +61,13 @@ All notable changes per phase. Dates are UTC.
 ### Fixed
 - Policy recommendation was dominated by runtime ratios (3 ms vs 300 ms); now min-max normalised per criterion.
 - Run pickers showed the first option while nothing was selected.
+
+## [1.0.0] — 2026-10-14 — Phase 7: polish, evaluation, deployment
+### Added
+- CSV order import (validated, all-or-nothing) and CSV/JSON run export, with UI.
+- Rate limiting, Prometheus-style ops metrics, nginx block for internal metrics.
+- Playwright E2E smoke and screenshot capture against the real stack; CI runs E2E inside the compose job.
+- Documentation set: architecture & sequence diagrams, ERD, formulations, algorithm catalogue, operations, API examples,
+  OpenAPI export, case study, demo script; synthetic dataset exports and CSV example; demo population script.
+### Removed
+- Unused placeholder screen and empty `app/simulation` package.

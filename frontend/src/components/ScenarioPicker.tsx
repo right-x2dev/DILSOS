@@ -16,7 +16,7 @@ export function ScenarioPicker() {
   if (!items.length) return <span className="text-xs text-amber-700">시나리오 없음 — 시나리오 화면에서 생성/시드하세요</span>;
   return (
     <label className="flex items-center gap-2 text-sm">
-      <span className="hidden text-ink-600 lg:inline">시나리오</span>
+      <span className="hidden whitespace-nowrap text-ink-600 lg:inline">시나리오</span>
       <select
         aria-label="시나리오 선택"
         className={`${inputCls} max-w-[16rem] py-1`}

@@ -106,3 +106,38 @@ improves the bottleneck scenario by 10.4 % total cost vs sequential and equals i
 | Rule-based policy selector with min-max normalised weights + human-readable reason | TESTED | `test_recommendation_is_transparent`, `test_recommendation_not_dominated_by_runtime_scale` (regression found in browser check) |
 | API: idempotent events (201/200/409), versioned reschedule runs (parent + schedule_version+1, per-policy idempotency, optimistic version guard), summary + recommendation | TESTED | `tests/integration/test_phase6_api.py`; live API + DB worker run (base #10 → #11–#13) |
 | Disruption simulator UI (event form, event list, policy runs, comparison, recommendation weights, before/after Gantt + route diff) | TESTED | `frontend/src/tests/phase6.test.tsx`; manual browser check |
+
+## Phase 7 — Polish, evaluation, deployment
+
+| Item | Status | Evidence |
+|---|---|---|
+| CSV order import (size/type/encoding/header/row validation, all-or-nothing, row cap) + UI with row-level errors and template | TESTED | `test_phase7_api.py` (success, rollback, header/size/type), `test_example_dataset_csv_imports_into_normal_day`; `phase7.test.tsx` |
+| Run export CSV / JSON (validated runs only, UTC timestamps, provenance) + UI buttons | TESTED | `test_export_csv_and_json`; `phase7.test.tsx` |
+| Per-user rate limit for runs / experiments / reschedules / imports | TESTED | `test_rate_limit` |
+| Prometheus metrics endpoint (runs, runtimes, rejected-infeasible, queue depth, HTTP) — hidden from public nginx | TESTED | `test_ops_metrics` |
+| OpenAPI covers every spec endpoint; static `docs/api/openapi.json` + `examples.http` | TESTED | `test_openapi_lists_spec_endpoints` |
+| Playwright E2E smoke (login → warehouse run → Gantt → routing → map → disruption → compare) against the real stack | TESTED (local: Edge + dev stack) / IMPLEMENTED (CI compose job) | `frontend/e2e/smoke.spec.ts` — passed locally in 8.7 s |
+| Screenshots from real runs | DONE | `docs/screenshots/*.png` via `e2e/screenshots.spec.ts` |
+| Docs: README, architecture + sequence diagrams, ERD, formulations, algorithms, operations (deploy, backup/restore, security, observability), case study, demo script | DONE | `README.md`, `docs/**` |
+| Demo story automation | TESTED | `scripts/demo_populate.py` (ran on a fresh DB; numbers identical to in-memory runs) |
+| Full benchmark suite (medium/large, 10 seeds) | IMPLEMENTED, not executed | `python -m app.experiments.benchmark --suite full` |
+
+## Acceptance checklist (spec §10.3)
+
+| Criterion | Status | Notes |
+|---|---|---|
+| `docker compose up --build` starts all services with `.env.example` defaults | IMPLEMENTED — pending CI | No Docker on the dev machine; CI job `compose-smoke` builds, starts, waits for readiness, runs API smoke + Playwright |
+| Migration & seed commands work; demo login succeeds | TESTED | SQLite locally (fresh DB in this session), MySQL 8.4 in CI integration job; local MySQL needs `scripts/mysql_init.sql` (owner) |
+| Create/load a scenario, run a real warehouse solver and a real VRPTW solver, inspect verified schedules/metrics, API-backed Gantt, dock and map views | TESTED | E2E smoke + API tests + screenshots |
+| Integrated baseline produces consistent pick→pack→load→depart→deliver timestamps | TESTED | `assert_chain_consistent`, `test_integrated_run_has_consistent_timestamps` |
+| Injected disruption yields versioned KEEP/PARTIAL/FULL outputs or explicit infeasibility, differences shown in UI | TESTED | Phase 6 tests, disruption simulator diff view |
+| ≥1 baseline and ≥1 advanced algorithm benchmarked on identical datasets with reproducible seeds | TESTED | `docs/experiments/benchmark_quick_*` |
+| No invalid schedule published as feasible | TESTED | `test_invalid_schedule_is_never_published`, property tests |
+| All mandatory tests pass; CI builds | TESTED locally / pending first CI run | see final report |
+| README includes setup and architecture | DONE | `README.md` |
+
+## Not implemented (explicitly)
+* Phase 8 optional extensions: MILP network/inventory planning, demand forecasting, real road routing (OSRM), RL dispatch,
+  live integrations, stochastic simulation (SimPy).
+* Integrated ALNS spanning warehouse + routing moves (spec "optional research").
+* SSE push updates (polling is used, as the spec allows initially).

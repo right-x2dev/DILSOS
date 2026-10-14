@@ -10,6 +10,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.errors import install_error_handlers
+from app.api.v1.ops import record_http
 from app.api.v1.router import api_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging, request_id_var
@@ -46,6 +47,7 @@ def create_app() -> FastAPI:
         finally:
             request_id_var.reset(token)
         response.headers["X-Request-ID"] = rid[:64]
+        record_http(request.method, response.status_code)
         log.info(
             "request",
             extra={

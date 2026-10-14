@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:8080"
 
     max_upload_bytes: int = 1_048_576
+    rate_limit_per_minute: int = 120  # per user, for run/experiment/import submissions (0 = off)
     max_solver_time_limit_s: int = 120
     run_timeout_s: int = 300
 

@@ -1,0 +1,81 @@
+@base = http://localhost:8000/api/v1
+
+### Login (demo account; development only)
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{"email": "demo@dilsos.local", "password": "demo1234"}
+
+###
+@token = {{login.response.body.access_token}}
+
+### List scenarios
+GET {{base}}/scenarios
+Authorization: Bearer {{token}}
+
+### Build a synthetic scenario
+POST {{base}}/scenarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"name": "demo-api", "seed": 7, "n_orders": 30, "n_workers": 4, "n_pack_stations": 2, "n_docks": 2, "n_vans": 3, "n_trucks": 1}
+
+### Validate inputs
+POST {{base}}/scenarios/1/validate
+Authorization: Bearer {{token}}
+
+### Enqueue an integrated run (202)
+# @name run
+POST {{base}}/scenarios/1/runs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"problem_type": "integrated", "algorithm": "integrated_iterative", "time_limit_s": 15, "seed": 1}
+
+### Poll
+GET {{base}}/runs/{{run.response.body.id}}
+Authorization: Bearer {{token}}
+
+### Validated schedule / report / metrics
+GET {{base}}/runs/{{run.response.body.id}}/schedule
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/runs/{{run.response.body.id}}/validation
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/runs/{{run.response.body.id}}/metrics
+Authorization: Bearer {{token}}
+
+### Experiment: algorithms × seeds on one snapshot
+POST {{base}}/scenarios/1/experiments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"problem_type": "routing", "algorithms": ["routing_insertion", "routing_ortools", "routing_alns"], "seeds": [0, 1, 2], "time_limit_s": 5}
+
+### Record a disruption (idempotent)
+# @name ev
+POST {{base}}/scenarios/1/events
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Idempotency-Key: breakdown-V02-0930
+
+{"event_type": "vehicle_breakdown", "event_time_min": 210, "affected_code": "V02"}
+
+### Reschedule with all policies
+POST {{base}}/runs/{{run.response.body.id}}/reschedule
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"event_id": {{ev.response.body.id}}, "policies": ["KEEP", "PARTIAL", "FULL"], "freeze_window_min": 30, "time_limit_s": 10}
+
+### Compare policies + recommendation
+GET {{base}}/runs/{{run.response.body.id}}/reschedules?w_cost=1&w_lateness=0.5&w_changes=0.5
+Authorization: Bearer {{token}}
+
+### Export
+GET {{base}}/exports/runs/{{run.response.body.id}}?format=csv
+Authorization: Bearer {{token}}

@@ -10,6 +10,7 @@ from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession, WriterUser
 from app.api.errors import ApiError
+from app.api.ratelimit import check_rate
 from app.api.v1.scenarios import get_scenario
 from app.db import models as m
 from app.optimization.common import registry
@@ -125,6 +126,7 @@ def algorithms(_: CurrentUser) -> list[AlgorithmOut]:
 @router.post("/scenarios/{scenario_id}/runs", response_model=RunOut, status_code=202)
 def create_run(scenario_id: int, body: RunCreate, db: DbSession, user: WriterUser) -> RunOut:
     sc = get_scenario(db, scenario_id)
+    check_rate(user.id, "run")
     try:
         run = enqueue_run(
             db,
@@ -167,6 +169,7 @@ class ExperimentOut(BaseModel):
 def create_experiment(scenario_id: int, body: ExperimentCreate, db: DbSession, user: WriterUser) -> ExperimentOut:
     """Enqueue algorithms × seeds on ONE shared snapshot so results are directly comparable."""
     sc = get_scenario(db, scenario_id)
+    check_rate(user.id, "experiment")
     if len(body.algorithms) * len(body.seeds) > 60:
         raise ApiError(422, "experiment_too_large", "at most 60 runs per experiment")
     snap_row = current_snapshot(db, sc, reason="experiment")
