@@ -76,3 +76,18 @@ _Last updated: 2026-10-14 — end of Phase 1._
 | Objective decomposition persisted | TESTED | `schedule_runs.metrics.cost`; API metrics test |
 | Integrated journey UI with delay attribution (heuristic, labelled as such) | TESTED | `frontend/src/tests/phase4.test.tsx`; manual browser check (run #9) |
 | Integrated ALNS across all layers (optional research) | TODO | spec marks optional; routing ALNS is Phase 5 |
+
+## Phase 5 — Metaheuristics & experiments
+
+| Item | Status | Evidence |
+|---|---|---|
+| Warehouse SA / Tabu / GA (order-permutation encoding, SGS decoder, validator-checked incumbents, eval budgets, seeds) | TESTED | `tests/optimization/test_metaheuristics.py` (never worse than EDD start, reproducible, measured improvement on tight instance) |
+| Routing ALNS (4 destroy, 2 repair, adaptive weights, SA acceptance, iteration budget) | TESTED | `test_alns_reproducible_and_not_worse_than_insertion`; usable inside integrated (`params.routing="alns"`) |
+| Benchmark harness (instances × algorithms × seeds, best/mean/std, infeasible rate, TTFF, gap, hardware metadata) | TESTED (quick suite executed) | `docs/experiments/benchmark_quick_*` (generated 2026-10-14, 8 CPUs, OR-Tools 9.15) |
+| Experiments API (algorithms × seeds on one shared snapshot) | TESTED | `tests/integration/test_phase5_api.py` |
+| Comparison dashboard (same-snapshot check, per-algorithm stats, stacked cost breakdown, runtime-vs-cost scatter, CSV download) | TESTED | `frontend/src/tests/phase5.test.tsx` |
+| Full benchmark suite (medium/large, 10 seeds) | IMPLEMENTED | `--suite full` available; not executed in this session (time) |
+
+Selected measured results (quick suite, 5 s budget): CP-SAT best on every warehouse instance (gap 0 on small-s1);
+ALNS (≤150 iterations, 0.05–0.8 s) within 0–0.2 % of OR-Tools' 5 s solution on best-of-5; integrated iterative
+improves the bottleneck scenario by 10.4 % total cost vs sequential and equals it on the small instances.

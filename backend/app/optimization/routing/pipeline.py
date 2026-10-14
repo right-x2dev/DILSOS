@@ -40,11 +40,14 @@ class RoutingScheduler:
     def __init__(self, method: str):
         self.method = method
         self.name = f"routing_{method}"
-        self.kind = {"nn": "heuristic", "insertion": "heuristic", "ortools": "metaheuristic"}[method]
+        self.kind = {"nn": "heuristic", "insertion": "heuristic", "ortools": "metaheuristic", "alns": "metaheuristic"}[
+            method
+        ]
         self.description = {
             "nn": "시간지향 최근접 이웃 (Solomon식) + 잔여 최저비용 삽입",
             "insertion": "최저비용 삽입 (고정비+거리+지연, 용량·근무·시간창 유지)",
             "ortools": "OR-Tools Routing VRPTW (용량·시간 차원, GLS)",
+            "alns": "ALNS (무작위/최악/관련/경로 제거 + 탐욕/regret-2 복구, 적응 가중치, SA 수락)",
         }[method]
 
     def solve(
@@ -66,6 +69,20 @@ class RoutingScheduler:
             routes, left = nearest_neighbour(sim, units)
         elif self.method == "insertion":
             routes, left = cheapest_insertion(sim, units)
+        elif self.method == "alns":
+            from app.optimization.routing.alns import alns_search
+
+            start, left0 = cheapest_insertion(sim, units)
+            routes, left, m = alns_search(
+                sim,
+                start,
+                left0,
+                config.time_limit_s,
+                config.seed,
+                cancel,
+                int(config.params.get("max_iterations", 100_000)),
+            )
+            meta.update(m, initial="cheapest_insertion")
         else:
             from app.optimization.routing.ortools_vrptw import solve_vrptw
 

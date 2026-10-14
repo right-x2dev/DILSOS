@@ -1,0 +1,44 @@
+{
+ "suite": "quick",
+ "config": {
+  "problems": {
+   "warehouse": [
+    "warehouse_fifo",
+    "warehouse_edd",
+    "warehouse_spt",
+    "warehouse_cpsat",
+    "warehouse_sa",
+    "warehouse_tabu",
+    "warehouse_ga"
+   ],
+   "routing": [
+    "routing_nn",
+    "routing_insertion",
+    "routing_ortools",
+    "routing_alns"
+   ],
+   "integrated": [
+    "integrated_sequential",
+    "integrated_iterative"
+   ]
+  },
+  "time_limit": 5.0,
+  "runs": 5,
+  "max_evaluations": 600,
+  "alns_iterations": 150
+ },
+ "instances": [
+  "small-s1",
+  "small-s2",
+  "small-s3",
+  "warehouse_bottleneck"
+ ],
+ "hardware": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.7",
+  "cpu_count": 8,
+  "processor": "Intel64 Family 6 Model 204 Stepping 3, GenuineIntel",
+  "ortools": "9.15.6755",
+  "timestamp_utc": "2026-10-14T05:31:29+00:00"
+ }
+}

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import APIRouter, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession, WriterUser
@@ -28,7 +29,7 @@ from app.schemas.api import (
 )
 from app.services.audit import audit
 from app.services.runs import RunError, enqueue_run, load_schedule, request_cancel
-from app.services.scenario_store import snapshot_from_row
+from app.services.scenario_store import current_snapshot, snapshot_from_row
 
 router = APIRouter(tags=["runs"])
 
@@ -145,6 +146,66 @@ def create_run(scenario_id: int, body: RunCreate, db: DbSession, user: WriterUse
     dispatch_run(run.id)
     db.refresh(run)
     return run_out(db, run)
+
+
+class ExperimentCreate(BaseModel):
+    problem_type: Literal["warehouse", "dock", "routing", "integrated"]
+    algorithms: list[str] = Field(min_length=1, max_length=12)
+    seeds: list[int] = Field(default=[0], min_length=1, max_length=20)
+    time_limit_s: float = Field(default=5.0, gt=0, le=120)
+    params: dict[str, Any] = Field(default_factory=dict)
+
+
+class ExperimentOut(BaseModel):
+    scenario_id: int
+    snapshot_id: int
+    run_ids: list[int]
+    note: str
+
+
+@router.post("/scenarios/{scenario_id}/experiments", response_model=ExperimentOut, status_code=202)
+def create_experiment(scenario_id: int, body: ExperimentCreate, db: DbSession, user: WriterUser) -> ExperimentOut:
+    """Enqueue algorithms × seeds on ONE shared snapshot so results are directly comparable."""
+    sc = get_scenario(db, scenario_id)
+    if len(body.algorithms) * len(body.seeds) > 60:
+        raise ApiError(422, "experiment_too_large", "at most 60 runs per experiment")
+    snap_row = current_snapshot(db, sc, reason="experiment")
+    db.commit()
+    ids = []
+    for alg in body.algorithms:
+        try:
+            info = registry.get(alg)
+        except KeyError as e:
+            raise ApiError(422, "unknown_algorithm", f"Unknown algorithm '{alg}'") from e
+        for seed in body.seeds if info.stochastic else body.seeds[:1]:
+            try:
+                run = enqueue_run(
+                    db,
+                    sc,
+                    body.problem_type,
+                    alg,
+                    body.time_limit_s,
+                    seed,
+                    body.params,
+                    user.id,
+                    snapshot_row=snap_row,
+                    dispatch=False,
+                )
+            except RunError as e:
+                raise ApiError(422, e.code, str(e)) from e
+            ids.append(run.id)
+    audit(db, user.id, "experiment", "scenario", str(sc.id), detail={"runs": ids, "algorithms": body.algorithms})
+    db.commit()
+    from app.services.runs import dispatch_run
+
+    for rid in ids:
+        dispatch_run(rid)
+    return ExperimentOut(
+        scenario_id=sc.id,
+        snapshot_id=snap_row.id,
+        run_ids=ids,
+        note="deterministic algorithms run once; stochastic ones once per seed",
+    )
 
 
 @router.get("/runs", response_model=Page[RunOut])

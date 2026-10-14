@@ -2,6 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../features/auth/authStore";
 import { LoginPage } from "../features/auth/LoginPage";
+import { ComparePage } from "../features/compare/ComparePage";
 import { DashboardPage } from "../features/dashboard/DashboardPage";
 import { DockPage } from "../features/docks/DockPage";
 import { GanttPage } from "../features/gantt/GanttPage";
@@ -43,7 +44,7 @@ export function App() {
         <Route path="routes" element={<RoutesPage />} />
         <Route path="journey" element={<JourneyPage />} />
         <Route path="disruptions" element={<ComingSoon title="교란 시뮬레이터" phase="Phase 6" />} />
-        <Route path="compare" element={<ComingSoon title="알고리즘 비교" phase="Phase 5" />} />
+        <Route path="compare" element={<ComparePage />} />
         <Route path="runs" element={<RunsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

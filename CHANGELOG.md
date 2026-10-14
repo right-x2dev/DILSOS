@@ -43,3 +43,10 @@ All notable changes per phase. Dates are UTC.
 - Integrated journey timeline UI (release → pick → pack → dock wait → load → transit → service, lateness and heuristic main-cause attribution).
 ### Changed
 - Inventory allocation order is now (priority, release, id) so tightening due dates never changes backorders.
+
+## [0.6.0] — 2026-10-14 — Phase 5: metaheuristics & experiments
+### Added
+- Warehouse simulated annealing, tabu search and genetic algorithm over order permutations (feasible by construction, validator-checked incumbents).
+- Routing ALNS with adaptive operator weights; available standalone and inside integrated coordination.
+- Benchmark harness `app.experiments.benchmark` + generated quick-suite results in `docs/experiments/`.
+- `POST /scenarios/{id}/experiments` (algorithms × seeds on one snapshot) and the comparison dashboard (stats, charts, CSV).
